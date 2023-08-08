@@ -1,0 +1,526 @@
+#Day 01 (1/8/2023)
+
+Modulus Operator:
+	-> (int(A/B) * B) + (A % B) = A // this equation is used to calculate the result of %
+	-> @A = -ve => result is -ve
+	-> @B = -ve => result is +ve (does not matter)
+	
+Difference between x++ && x = x + 1: 
+	In order to understand the difference, examine the assembly code for both
+	-> x++:	INC x // only a single assembly instruction
+	
+	-> x = x + 1:	LOAD x // requires
+					MODIFY x // three
+					STORE x // assembly instructions
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+
+#Day 02 (2/8/2023) --- If & Loops
+
+GCC inherently supports short-circuiting in logic operations
+(Beware that parts of the statement can be outright skipped/not executed)
+// Anything ANDed with 0 will always be 0 -> ignore it
+// Anything ORed with 1 will always be 1 -> ignore it
+==================================================================================
+post/pre increment has undefined behaviour when used in printf 
+==================================================================================
+switch case: -> use look up table (jumps to case address directly)
+			 -> consumes more memory (it is advisable to only not use switch in memory-constrained systems)
+			 -> does not know when to stop (hence, break is mandatory)
+			 -> const time in checking (unlike if you have to pass through ALL preceeding the required case)
+			 -> for equality, switch case is way faster and more convenient
+			 -> otherwise, use if/else (cant even use switch for non-int case values)
+==================================================================================
+for loop 	-> when the number of iterations is known
+			-> declaring i inside for is supported in C99 and later
+			-> counters declared in for loop can be seen outside the scope of 
+				the loop in C11 and later
+
+while loop	-> when waiting for an event that I do not know when it will happen
+
+do while 	-> its body will be executed AT LEAST once before exiting the loop
+==================================================================================
+infinite loops	-> for (;;);
+				-> while (1);
+				
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+
+#Day 03 (3/8/2023) --- Functions & Arrays
+
+Beware of the following situation:
+	char a, b;
+	printf("enter a: ");
+	scanf("%c", &a);
+	// Must put fflush(stdin); here to avoid scanf crashing/misbehaving
+	// upon pressing enter -> enter has an ASCII code itself
+	printf("enter b: ");
+	scanf("%c", &b);
+	
+Ternary operator:
+	condition? instruction1(executed is condition is true) : instruction2 (executed is condition is false)
+	
+=================================================================================
+
+Functions:
+	-> Prototype
+	-> Implementation/body
+	-> Call
+	
+What happens behind the scenes when upon calling a function:
+	-> store the context of execution (PC value)
+	-> Jump to function address + update PC
+	-> open a stack frame
+	-> execute the function
+	-> upon exiting, store the return value (if exists), 
+		collapse the stack frame, update the program counter
+
+Values given to a function upon calling == Parameters
+Variables written in the function's prototype == Arguments
+
+We can swap 2 numbers by:
+	-> using a 3rd variable temp
+		temp = x;
+		x = y;
+		y = temp;
+		
+	-> using xor (no 3rd variable used)
+		x ^= y;
+		y ^= x;
+		x ^= y;
+		
+	-> using addition/subtraction (no 3rd variable used)
+		x = x + y;
+		y = x - y;
+		x = x - y;
+		
+	-> using multiplication/division (no 3rd variable used)
+		x = x * y;
+		y = x / y;
+		x = x / y;
+
+Consider the following snippet:
+	int x = 10; // global
+	int main()
+	{
+		int x = 5; // local
+		printf("%d", x); // prints 5 with no errors!
+	}
+	// it's as if the function looks within its scope first for 
+		the variable x and since it has found it, it will not consider
+		the global one.
+		
+Consider the following snippet:
+	int x = 10;
+	void change()
+	{
+		x++;
+	}
+	int main()
+	{
+		int x = 5;
+		printf("%d", x); // prints 5
+		change();		 // this niBBa changes the global x
+		printf("%d", x); // also prints 5 XDDD
+	}
+
+=================================================================================
+
+Arrays
+
+Consider the following initialization of array:
+	int x[5] = {2, 3}; // x = {2, 3, 0, 0, 0} (acceptable)
+	
+	int x[5] = {1, 2, 3, 4, 5, 6}; // compiler dependent! it will overwrite the
+									  position after the array to 6
+
+Sorting Algorithms (there are 7 of them!)
+		1. Bubble Sort
+		2. Quick Sort
+		3. Merge Sort
+Searching Algorithms (there are a lot more)
+		1. Linear Search (loop iterating on all array elements)
+		2. Binary Search (only for sorted elements)
+		
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+#Day 05 (6/8/2023)
+
+Functions by default returns 1 (if you forgot to write return at the end)
+It is advisable to write it yourself, tho (compiler independent behaviour)
+
+you can use a function without using its return value (no errors)
+	.
+	.
+	.
+	add(x, y);
+	int z = printf("%d", z); // z = no of characters (1 in this case)
+
+printf returns the number of printed characters...! (it's often not used, tho)
+
+scanf also has a return value! (returns the number of stored variables!)
+
+consider this cursed code snippet:
+	.
+	.
+	.
+	switch(printf("DC"))
+	{
+		case 1: // case + break
+		case 2: // case + break
+		default: //
+	}
+	// no compilation errors
+	// it will print DC, then switches on the value returned from printf
+	// which is the number of printed characters (2) then execute case 2
+	
+interview question: How to print sth without semicolon?
+Answer: put printf inside a condition/loop/switch statement	
+if (printf("Ahmed")); // all non-zero values are considered true
+// prints then executes if (in case of how I wrote it, if will only print)
+
+
+#Pointers
+	-> variables that carry address
+	-> pointee_datatype * name;
+		int ptr;
+		ptr = &x; // &x = address of x
+		int * ptr = &x;
+	-> accessing/changing the value in the address stored in ptr // use dereference operator
+		*ptr = 20; // *ptr = value of dereferenced ptr
+	
+	-> Pass by reference vs Pass by value
+	-> Dangling pointer (a pointer to a mem location that no longer exists)
+		like a pointer to a local variable in a function (unless you use static or sth)
+	-> naming a pointer and a variable the same name is prohibited
+		since pointers are still variables
+	-> A Wild Pointer is an uninitialized pointer.
+General rules of thumb:
+	-> Always initialize your pointers to NULL
+		NULL == out of range
+		NULL == Zero (void*)0
+		// pointer to a memory location out of range/safe
+	-> When receiving a pointer in a function
+		if (ptr != NULL)
+		{
+			// do the thing
+		}
+		else
+		{
+			// print error
+		}
+		
+NOTES:
+	1. pointee type
+		-> access size/type
+		-> step size
+	2. Notation
+		-> offset (*(ptr + i))
+		-> subscriptor (arr[i])
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+#Day 06 (7/8/2023)
+
+Pointer shenanigans:
+	-> you cannot assign a const value to a pointer
+		int x = 0x30; // considered a value not an address
+		int *ptr;
+		ptr = x;
+		// behaviour is compiler dependent
+		// will either produce an error or a warning
+		// assigning values this way will NEVER be considered
+			an address
+
+	-> sizeof(ptr) is always constant regardless of pointee type
+	   and it is machine dependent (address will either be 4 or 8 bytes)
+	-> for int*
+		1. step = 4
+		2. access = int
+	-> for char*
+		1. step = 1
+		2. access = char
+		
+EXTRA Assignment: Swap the 1st and last bytes of an int using pointers
+	int x = 0x99000011;
+	
+	char *byte1;
+	char temp;
+	
+	byte1 = &x;
+	
+	printf("before swapping: %p\n", x);
+	
+	temp = *byte1;
+	*byte1 = *(byte1 + 3);
+	*(byte1 + 3) = temp;
+	
+	printf("after swapping: %p\n", x);
+	
+Literals in C
+	-> decimal
+		1. base 10 == 10, 20, 15
+		2. binary (base 2) == 0b10010011
+		3. octal (base 8) == 067 (always starts with 0)
+		4. hexadecimal (base 16) == 0x6942
+	-> floating 6.9 
+	-> character 'A'
+	-> string "ABC"
+	
+Pointer to function *SCREAMS*
+	-> declaration:
+		pointee_return_type (*name)(parameters' types)
+		void (*func_ptr)(void) = func; // function name is a pointer to it
+	-> calling:
+		func_ptr(); // can be used just like the function itself
+		// the advantages of this is to execute functions out of scope/in other files
+		// also used for sth called "Callback"
+	
+Data Modifiers
+	-> Datatypes
+		1. Primitive (int, char, float, double, void)
+		2. Derived (function, pointer, array)
+		3. User-defined (struct, union, enum)
+	-> How to represent signed numbers?
+		1. Sign Magnitude
+			MSB? 1 (-ve) : 0 (+ve)
+			Problems = 2 values for zero & error-infested math operations
+		2. 1's Complement
+			Problems = STILL 2 values for zero
+		3. 2's Complement
+	-> for signed char
+		0->127 +ve (any number over that will be -ve)
+		-128->-1 -ve
+	-> unsigned and signed keywords (only for char and int)
+	
+Size Modifiers
+	-> char: not less than 1 byte
+	-> int: not less than 2 bytes
+	-> float: 				4 bytes
+	-> double:				8 bytes
+	Problem: datatype sizes are compiler dependent XDDD
+			1. Memory overflow (big to small)
+			2. Data loss (small to big)
+	Solution: Define your own datatype! XDDD
+	Syntax:
+		typedef old_type new_type;
+		// typedef is a keyword for renaming
+	EX:
+		typedef unsigned char u8;
+		
+		u8 x = 10; == unsigned char x = 10;
+	1. short (for int only) -> limits int to 2 bytes
+	2. long (int, double) -> limits int to 4 bytes
+						  -> limits double to 10 bytes
+	Rules:
+		1. order is not important
+			short unsigned int == unsigned short int
+		2. not all modifiers can be used with all datatypes
+			signed/unsigned (char and int only)
+			short (int only)
+			long (int and double)
+		3. no opposing modifiers should be put together
+			short long || signed unsigned
+		
+	OUR Standards:
+		u for unsigned
+		s for signed
+		num for number of bits
+		f for float
+		
+		u8
+		s8
+		u16
+		s16
+		u32
+		s32
+		f32
+		f64
+		
+	## Before defining your datatypes, you must test the size of each
+		datatypes using sizeof to design them accordingly
+		
+Symbol Table: (for each file, it lists all the used variables/functions in a file)
+	Object 		| 	State
+  var/fun name 	| provided/needed
+	Linker is responsible for "linking" between files with dependencies.
+	ie; if a function is used in a file and its implementation is in another file
+	it will "link" both
+	
+	Object Verification:
+		1. Make sure that every needed object is provided
+			else: linker error "undefined reference to ..."
+		2. Make sure every object is ONLY provided ONCE
+			else: linker error "multiple definition..."
+
+Storage Modifiers
+	-> static (for global: restricts a variable to its file scope || for local/in function: retains its value until the program ends)
+	-> extern (looks for object in other files)
+	-> auto (all variables are auto by default - destroyed at the end of their lifetime)
+	-> register (asks GCC if a certain variable can be stored in a GP register to speed up operations on it or not -- GCC the chad mostly refuses XDDD)
+	
+const Keyword: promises the compiler that it will not be changed
+	const u8 x = 10; // trying to change x will cause an error
+	-> Constant pointer: a pointer whose address value will not be changed
+		int *const ptr = &x; // always points to x
+		ptr = &y; // error
+	-> Pointer to constant: pointer to an address whose value will not be changed
+		const int* ptr = &x;
+		*ptr = 30; // error
+	-> Constant pointer to a constant!
+		const int* const ptr = &x;
+		// cant dereference it
+		// cant change its address
+		
+	# constant variable hacking (BRUH!)
+		const int x = 20;
+		x = 30; // error
+		int *ptr = &x;
+		*ptr = 30; // it will pass IF it's local
+				   // it's toolchain dependent IF it's global...!
+	
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+#Day 06 (8/8/2023)
+void pointer
+	-> sizeof(void) = compilation error OR 1?! (compiler dependent)
+	-> void pointer is a generic pointer that can point to ANY type
+		// I don't know what datatype I'll be pointing to
+		// so it's casted to whatever type I want/suits the input date
+Structure
+	-> you can copy the contents of a struct IF they have the same template
+		struct name ahmed, amr;
+		ahmed = amr;
+	-> cannot do arithmetic/equality operations on structs
+		amr = ahmed + 20; // error
+		amr += ahmed; // error
+		if (ahmed == arm) // error
+		int x = ahmed + amr; // error
+	-> passing struct to function:
+		void func(struct employee mystruct);
+		.
+		.
+		.
+		func(ahmed);
+	-> returning structs
+		struct employee func(...)
+		{
+			struct employee x;
+			.
+			.
+			.
+			return x;
+		}
+	-> alternative way to defining structs
+		typedef struct 
+		{
+			.
+			.
+			.
+		} employee;
+		void func(employee x);
+	-> Size of structures *WINKWINK*
+		memory padding is a bitch
+		so, to preserve both memory size and performance,
+		order the struct elements ascendingly/descendingly 
+		to get the best outcome
+		### if the word size for the toolchain is not mentioned
+			assume it'll be the largest of the variables inside the struct
+		__attribute && #pragma pack(no_of_bytes) are also used to optimize padding
+	-> Bitfield (compiler dependent)
+		restricts a struct variable to a number of bits
+		typedef struct
+		{
+			s8 x : 3;
+			s8 y : 2;
+		} my_struct;
+		.
+		.
+		.
+		my_struct s1;
+		s1.x = 0b111; // for some reason interviewers love this shit! XDDD
+		printf("%d", s1.x); // prints -1 cuz it's a signed number
+
+## Reusable Firmware Development (book that makes you create REUSABLE code that runs on all compilers)
+
+Union usecase
+	-> defining a union that contains a struct inside it *OH, MY!*
+		typedef union
+		{
+			struct 
+			{
+				u8 B0 : 1;
+				u8 B1 : 1;
+				u8 B2 : 1;
+				u8 B3 : 1;
+				u8 B4 : 1;
+				u8 B5 : 1;
+				u8 B6 : 1;
+				u8 B7 : 1;
+			} bit;
+			u8 byte;
+		} register;
+		.
+		.
+		.
+		register r1;
+		r1.byte = 10; // writes 10 (in decimal) to ALL bit locations
+		r1.bit.B0 = 1; // writes 1 on bit 0 ONLY
+		// it's basically used to define registers
+		
+enum
+	-> used to eliminate magic numbers (numbers that should have some meaning in the code context)
+	-> ex:
+		enum
+		{
+			sunday, // automatically renames it to 0
+			monday, // to 1
+			.
+			.
+			.
+		}
+	-> can also assign values to the enum elements:
+		enum
+		{
+			sunday = 2, 
+			monday, // the following elements always have incremented values = 4
+			.
+			.
+			.
+		}
+	-> It is better to use enum and not #define due to:
+		1. Using the right compiler+debugger combination, the debugger will print 
+		enumeration variables by their enumeration name and not by their number. So 
+		"StateBlahBlup" reads much nicer than "41", doesn't it?
+		
+		2. You don't have explicitly give every state a number, the compiler 
+		does the numbering for you if you let it. Let's assume you have already 
+		20 states and you want to add a new state in the middle, in case of defines, 
+		you have to do all renumbering on your own. In case of enumeration, you can 
+		just add the state and the compiler will renumber all states below this new 
+		state for you.
+		
+		3. You can tell the compiler to warn you if a switch statement does not handle
+		all the possible enum values, e.g. because you forgot to handle some values or 
+		because the enum was extended but you forgot to also update the switch statements
+		handling enum values (it will not warn if there's a default case though, as all 
+		values not handled explicitly end up in the default case).
+		
+Paths of header files:
+	-> Absolute path (not used cuz it conflicts with project sharing)
+		#include "D:/new/mylib.h" // actual header file path
+	-> Relative path (This one is mostly used)
+		#include "mylib.h" // header file should be present in the source file folder
+	-> to go back in directory
+		#include "../lib.h"
+		
+EXTRA (Assignment)
+	-> set_bit(u8 var, u8 bit);
+	-> clr_bit(u8 var, u8 bit);
+	-> tog_bit(u8 var, u8 bit);
