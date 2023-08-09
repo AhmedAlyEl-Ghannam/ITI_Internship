@@ -14,6 +14,9 @@ static node* createNode(void)
 
 void swap_nodes(node* node1, node* node2)
 {
+	if ((node1 == NULL) || (node2 == NULL))
+		printf("What the Actual Duck?!\n");
+	
 	(node1->data) ^= (node2->data);
 	(node2->data) ^= (node1->data);
 	(node1->data) ^= (node2->data);
@@ -62,12 +65,12 @@ s8 linkedList_addNode_atIndex(s32 value, u16 index)
 
 s8 linkedList_addNode_first(s32 value)
 {
-	return linkedList_addNode_atIndex(value, 1);
+	return linkedList_addNode_atIndex(value, 0);
 }
 
 s8 linkedList_addNode_last(s32 value)
 {
-	return linkedList_addNode_atIndex(value, list_size);
+	return ( ((list_size - 1) > -1) ? linkedList_addNode_atIndex(value, list_size - 1) : -9 );
 }
 
 // Remove Node
@@ -79,27 +82,30 @@ s8 linkedList_removeNode_atIndex(u16 index)
 	
 	
 	
-	if (list_size == 0)
+	if (linkedList_isEmpty() == -5)
 		return -3; // trying to remove node from an empty list
-	else if (list_size > 1)
+	else if (index > 0)
 	{
-		node *temp = head;
-		node* temp2 = NULL;
+		node* temp = head;
+		node* previous_node = NULL;
 		index--; // this ensures that temp would be AT MOST (end-1)
 		
 		while (--index) // keep looping until you reach the node @ index-1
+		{
+			previous_node = temp;
 			temp = (temp->next_node);
+		}
+			
+		(previous_node->next_node) = (temp->next_node);
 		
-		temp2 = (temp->next_node->next_node); // keep it here to free it
-		temp->next_node = temp2->next_node;
-		
-		free(temp2);
-		temp2 = NULL;
+		free(temp);
+		temp = NULL;
 	}
-	else // list_size = 1 => free head node and set it to NULL
+	else // index = 0 => free head node and set it to NULL
 	{
 		free(head);
 		head = NULL;
+		head->next_node = NULL;
 	}
 	
 	list_size--;
@@ -108,39 +114,38 @@ s8 linkedList_removeNode_atIndex(u16 index)
 
 s8 linkedList_removeNode_first(void)
 {
-	return linkedList_removeNode_atIndex(1);
+	return linkedList_removeNode_atIndex(0);
 }
 
 s8 linkedList_removeNode_last(void)
 {
-	return linkedList_removeNode_atIndex(list_size);
+	return linkedList_removeNode_atIndex(list_size - 1);
 }
 
 // Sorting
 s8 linkedList_sort_ascendingly(void)
 {
-	if (list_size == 0) // empty list
+	if (linkedList_isEmpty() == -5) // empty list
 		return -4; // trying to sort an empty list
 	else if (list_size == 1)
 		return 0; // trying to sort a list that contains only one element
 	else // list larger than 2
 	{
-		int i, j;
-		node* temp_i = head;
-		node* temp_j = NULL;
+		node* start = head;
+		node* temp = NULL;
 		
 		// bubble sort
-		for (i = 0; i < list_size; i++)
+		while (start != NULL)
 		{
-			temp_j = temp_i;
-			for (j = 0; j < (list_size - i - 1); j++)
+			temp = start;
+			while (temp->next_node != NULL)
 			{
-				if ((temp_j->data) > (temp_j->next_node->data))
-				{
-					swap_nodes(temp_j, temp_j->next_node);
-				}
+				if ((temp->data) > (temp->next_node->data))
+					swap_nodes(temp, temp->next_node);
+				
+				temp = (temp->next_node);
 			}
-			temp_i = (temp_i->next_node);
+			start = (start->next_node);
 		}
 	}
 	
@@ -150,7 +155,7 @@ s8 linkedList_sort_ascendingly(void)
 // this should be the same as ascendingly but I will make all value comparisons -ve
 s8 linkedList_sort_descendingly(void) 
 {
-	if (list_size == 0) // empty list
+	if (linkedList_isEmpty() == -5) // empty list
 		return -4; // trying to sort an empty list
 	else if (list_size == 1)
 		return 0; // trying to sort a list that contains only one element
@@ -167,9 +172,8 @@ s8 linkedList_sort_descendingly(void)
 			for (j = 0; j < (list_size - i - 1); j++)
 			{
 				if ((-(temp_j->data)) > (-(temp_j->next_node->data)))
-				{
 					swap_nodes(temp_j, temp_j->next_node);
-				}
+				temp_j = (temp_j->next_node);
 			}
 			temp_i = (temp_i->next_node);
 		}
@@ -197,7 +201,7 @@ s8 linkedList_print(void)
 	u16 i;
 	node* temp = head;
 	
-	printf("[ ");
+	printf("\t\t\t[ ");
 	for (i = 0; i < list_size; i++)
 	{
 		printf("%d ", temp-> data);
@@ -211,13 +215,13 @@ s8 linkedList_print(void)
 // is_in_list => returns the index if yes : returns -1 if no
 s8 linkedList_isInList(s32 value)
 {
-	//if (linkedList_isEmpty())
-		//return -7; // trying to check for the existance of value in an empty list
+	if (linkedList_isEmpty() == -5)
+		return -7; // trying to check for the existance of value in an empty list
 	
 	node* temp = head;
 	
 	u8 is_in_list = 0;
-	u16 index_counter = 1;
+	u16 index_counter = 0;
 	
 	while(temp != NULL)
 	{	
@@ -236,3 +240,4 @@ s8 linkedList_isInList(s32 value)
 	else
 		return -8; // indicates that no nodes were found with this value
 }
+

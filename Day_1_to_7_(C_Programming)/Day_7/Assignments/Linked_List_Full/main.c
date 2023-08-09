@@ -60,7 +60,7 @@ void main(void)
 						return_type_handler(value);
 						break;
 						
-			case 9 : 	printf("\nSize of List = %d\n", linkedList_size());
+			case 9 : 	printf("\n\t\t\tSize of List = %d\n", linkedList_size());
 						break;
 						
 			case 10: 	value = linkedList_isEmpty();
@@ -69,11 +69,11 @@ void main(void)
 						
 			case 11: 	printf("\nEnter a value to search for: ");
 						scanf("%d", &value);
-						value = linkedList_isInList(value);
+						index = linkedList_isInList(value);
 						if (value == -8)
 							return_type_handler(value);
 						else
-							printf("Value was found at node %hhd\n", value);
+							printf("\t\t\tValue was found at node %hhd\n", value);
 						break;
 						
 			case 12: 	value = linkedList_print();
@@ -84,7 +84,7 @@ void main(void)
 			case 13: 	is_running ^= 1;
 						break;
 						
-			default:	printf("\nInvalid Input! Try Again\n");
+			default:	printf("\n\t\t\tInvalid Input! Try Again\n");
 			
 		}
 	}
@@ -121,27 +121,29 @@ void return_type_handler(s32 return_value)
 	
 	switch(return_value)
 	{
-		case -8:	printf("Cannot Find a Node with Such Value\n");
+		case -9:	printf("\t\t\tCannot Add a Node at the End of an Empty List\n");
 					break;
-		case -7: 	printf("Cannot Find a Node in an Empty List\n");
+		case -8:	printf("\t\t\tCannot Find a Node with Such Value\n");
 					break;
-		case -6: 	printf("Cannot Print an Empty List\n"); 						
+		case -7: 	printf("\t\t\tCannot Find a Node in an Empty List\n");
 					break;
-		case -5: 	printf("List is Empty\n"); 									
+		case -6: 	printf("\t\t\tCannot Print an Empty List\n"); 						
 					break;
-		case -4: 	printf("Unable to Sort an Empty List\n"); 						
+		case -5: 	printf("\t\t\tList is Empty\n"); 									
 					break;
-		case -3: 	printf("Node Removal from an Empty List is Prohibited\n"); 	
+		case -4: 	printf("\t\t\tUnable to Sort an Empty List\n"); 						
 					break;
-		case -2: 	printf("Memory Allocation was not Successful\n"); 				
+		case -3: 	printf("\t\t\tNode Removal from an Empty List is Prohibited\n"); 	
 					break;
-		case -1: 	printf("Out of Bounds: Invalid Index\n"); 						
+		case -2: 	printf("\t\t\tMemory Allocation was not Successful\n"); 				
 					break;
-		case  0: 	printf("Cannot Sort a List with Size 1\n"); 					
+		case -1: 	printf("\t\t\tOut of Bounds: Invalid Index\n"); 						
 					break;
-		case  1: 	printf("Command Executed Successfully\n"); 					
+		case  0: 	printf("\t\t\tCannot Sort a List with Size 1\n"); 					
 					break;
-		case  5: 	printf("List is Populated\n"); 								
+		case  1: 	printf("\t\t\tCommand Executed Successfully\n"); 					
+					break;
+		case  5: 	printf("\t\t\tList is Populated\n"); 								
 					break;
 	}
 }
