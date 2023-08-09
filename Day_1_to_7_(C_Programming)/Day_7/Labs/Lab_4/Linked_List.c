@@ -1,47 +1,56 @@
+#include "linked_list.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "Linked_List.h"
 
-linkedList* linkedList_init(void)
-{
-	linkedList* dumDumLinkedList = NULL;
-		
-	dumDumLinkedList->head = NULL;
-	dumDumLinkedList->head->next_node = NULL;
+static node* createNode(void);
+node *head = NULL;
+
+static node* createNode(void){
 	
-	dumDumLinkedList->size = 0;
-	
-	return dumDumLinkedList;
+	return (node*)malloc(sizeof(node));
 }
 
-void linkedList_addNode_at_index(linkedList* dumDumLinkedList, u8 index)
-{
-	if (dumDumLinkedList == NULL)
-	{
-		printf("Invalid Linked List Pointer!\n");
-		return;
+
+
+void addNode(s32 value){
+	node* new = createNode();
+	new->data = value;
+	new->next_node = NULL;
+	
+	if(head == NULL){
+		head = new;
 	}
 	
-	st_node* dumDumNode = NULL;
-	dumDumNode = (st_node*)malloc(sizeof(dumDumNode));
-	
-	if (dumDumNode == NULL)
-	{
-		printf("Unable to create a node!\n");
-		return;
-	}
-	
-	if (size == 0)
-	{
-		printf("Enter a value: ");
-		scanf("%d", dumDumNode);
-		dumDumLinkedList->head = dumDumNode;
-		(dumDumLinkedList->size)++;
+	else{
+		node *temp = head;
 		
+		while(temp->next_node != NULL){
+			temp = (temp->next_node);
+		}
+		
+		temp->next_node = new;
 	}
+	
+	
 }
 
-void linkedList_addNode(linkedList* dumDumLinkedList)
-{
-	linkedList_addNode_at_index(dumDumLinkedList, (dumDumLinkedList->size))
+
+
+void printLinkedList(void){
+	
+	if(head == NULL){
+		printf("Linked list is empty....!!!");
+	}
+	
+	else{
+		u32 i=0;
+		node *temp = head;
+		while(temp != NULL){
+			i++;
+			printf("\nNode number -%d = %d", i, temp-> data);
+			temp = (temp->next_node);
+		}
+		
+	}
+	
 }
