@@ -23,8 +23,8 @@ void swap_nodes(node* node1, node* node2)
 s8 linkedList_addNode_atIndex(s32 value, u16 index)
 {
 	// check index validity
-	//if ((index < 1) || (index > list_size))
-		//return -1; // indicates that index is out of bounds
+	if ((index < 0) || (index > list_size))
+		return -1; // indicates that index is out of bounds
 	
 	node* dumDumNode = NULL;
 	dumDumNode = createNode();
@@ -36,24 +36,23 @@ s8 linkedList_addNode_atIndex(s32 value, u16 index)
 	dumDumNode->data = value;
 	dumDumNode->next_node = NULL;
 	
-	if(head == NULL) // first node in the list
+	if(index == 0) // first node in the list
 	{
+		dumDumNode->next_node = head;
 		head = dumDumNode;
 	}
 	else
 	{
 		node *temp = head;
-		node* temp2 = NULL;
 		
 		while (--index) // keep looping until you reach the node @ index
 			temp = (temp->next_node);
 		
 		// temp is now the node @ the index
-		// temp->next_node = dumDumNode
 		// dumDumNode->next_node = *old node's next node*
-		temp2 = temp->next_node;
+		// temp->next_node = dumDumNode
+		dumDumNode->next_node = temp->next_node;
 		temp->next_node = dumDumNode;
-		dumDumNode->next_node = temp2;
 	}
 	
 	list_size++;
@@ -75,8 +74,8 @@ s8 linkedList_addNode_last(s32 value)
 s8 linkedList_removeNode_atIndex(u16 index)
 {
 	// check index validity
-	//if ((index < 1) || (index > list_size))
-		//return -1; // indicates that index is out of bounds
+	if ((index < 0) || (index > list_size))
+		return -1; // indicates that index is out of bounds
 	
 	
 	
@@ -192,8 +191,8 @@ s8 linkedList_isEmpty(void)
 
 s8 linkedList_print(void)
 {
-	//if (linkedList_isEmpty())
-		//return -6; // trying to print an empty list
+	if (linkedList_isEmpty() == -5)
+		return -6; // trying to print an empty list
 	
 	u16 i;
 	node* temp = head;
@@ -212,8 +211,8 @@ s8 linkedList_print(void)
 // is_in_list => returns the index if yes : returns -1 if no
 s8 linkedList_isInList(s32 value)
 {
-	if (linkedList_isEmpty())
-		return -7; // trying to check for the existance of value in an empty list
+	//if (linkedList_isEmpty())
+		//return -7; // trying to check for the existance of value in an empty list
 	
 	node* temp = head;
 	
