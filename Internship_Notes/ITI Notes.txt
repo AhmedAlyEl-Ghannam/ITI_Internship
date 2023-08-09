@@ -524,3 +524,78 @@ EXTRA (Assignment)
 	-> set_bit(u8 var, u8 bit);
 	-> clr_bit(u8 var, u8 bit);
 	-> tog_bit(u8 var, u8 bit);
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+#Day 07 (9/8/2023)
+
+Bro_Tip:
+	-> to write on multiple lines in notepad++/any cool IDE:
+		highlight x lines using left click while pressing ALT at the same time
+		   Just like this! UwU
+		   Just like this! UwU
+		   Just like this! UwU
+		   
+Dynamic Memory Allocation
+	-> RAM consists of the following sections:
+		.data => stores global + static initialized variables
+		.bss => stores global + static uninitialized variables (OS MOSTLY initializes them to 0)
+		Stack => local variables + static allocation (at compile time)
+			ex: int arr[5] = {1, 2, 3, 4, 5};
+		Heap => dynamically allocated data (@runtime)
+		.text
+		OR
+		.code => stores (most of) code
+		
+	-> malloc(): reserves x bytes in heap and returns a void* to it
+		1. syntax:
+			malloc(size_in_bytes);
+		2. malloc() should always be casted to the type for which you want to reserve memory
+		3. ex:
+			u8* ptr = NULL; // NULL is either pos 0 in memory or out of bounds pos
+			ptr = (u8*)malloc(7);
+			// you can then write to each byte individually
+			ptr[0] = sth; // or *(ptr + 0) = sth;
+			ptr[3] = sth_else; // or *(ptr + 3) = sth_else;
+	
+	-> calloc(): same as malloc() but initializes the allocated space to zero
+		1. syntax:
+			calloc(no_of_blocks, size_of_blocks_in_bytes);
+		2. ex:
+			u32* ptr;
+			ptr = (u32*)calloc(5, sizeof(u32));
+		
+
+	malloc() 		vs 			calloc()
+	memory allocate 		contiguous allocate
+	1 argument 					2 arguments
+	size in bytes			no of blocks && size of block
+	returns void* to 		returns void* to
+	1st byte				1st byte
+	faster						slower
+			
+	#NOTE:
+		Dynamically-allocated data stays in Heap (no relation to stack)
+		
+	-> free(): frees the dynamically-allocated memory you created with malloc/calloc
+		1. syntax:
+			free(ptr_to_dynamic_mem); // pass the pointer to the allocated mem
+		2. MUST DO to avoid memory leaks
+		
+	-> realloc(): reallocates the size of previously reserved memory
+		1. syntax:
+			realloc(ptr, new_size_in_bytes);
+		2. ex:
+			u32* ptr = (u32*)malloc(10 + sizeof(u32));
+			.
+			.
+			.
+			realloc(ptr, 20 * sizeof(u32)); // total bytes will be 20*4 instead of 10*4
+
+Array 			    vs  		Linked List
+Time of access					Time of access is 
+is constant						variable (depends on how far it is from head)
+Fixed size						No unused memory (very efficient way to use it)
+No extra memory					Extra memory usage due to pointer
+Static Allocation				Dynamic Allocation
