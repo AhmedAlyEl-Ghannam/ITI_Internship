@@ -599,3 +599,8 @@ is constant						variable (depends on how far it is from head)
 Fixed size						No unused memory (very efficient way to use it)
 No extra memory					Extra memory usage due to pointer
 Static Allocation				Dynamic Allocation
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 08 (10/8/2023)

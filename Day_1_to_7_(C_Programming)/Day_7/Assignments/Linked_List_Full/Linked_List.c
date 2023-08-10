@@ -39,10 +39,18 @@ s8 linkedList_addNode_atIndex(s32 value, u16 index)
 	dumDumNode->data = value;
 	dumDumNode->next_node = NULL;
 	
-	if(index == 0) // first node in the list
+	if((index == 0)) // first node in the list
 	{
-		dumDumNode->next_node = head;
-		head = dumDumNode;
+		if (head == NULL)
+		{
+			dumDumNode->next_node = NULL;
+			head = dumDumNode;
+		}
+		else
+		{
+			dumDumNode->next_node = head;
+			head = dumDumNode;
+		}
 	}
 	else
 	{
@@ -92,20 +100,24 @@ s8 linkedList_removeNode_atIndex(u16 index)
 		
 		while (--index) // keep looping until you reach the node @ index-1
 		{
-			previous_node = temp;
+			//previous_node = temp;
 			temp = (temp->next_node);
 		}
 			
-		(previous_node->next_node) = (temp->next_node);
-		
+		//(previous_node->next_node) = (temp->next_node);
+		temp->next_node = temp->next_node->next_node;
 		free(temp);
 		temp = NULL;
 	}
 	else // index = 0 => free head node and set it to NULL
 	{
+		if (list_size == 1)
+			head->next_node = NULL;
+		else // want to remove head but there are other nodes
+			(head->next_node) = (head->next_node->next_node);
 		free(head);
 		head = NULL;
-		head->next_node = NULL;
+		
 	}
 	
 	list_size--;
@@ -119,7 +131,7 @@ s8 linkedList_removeNode_first(void)
 
 s8 linkedList_removeNode_last(void)
 {
-	return linkedList_removeNode_atIndex(list_size - 1);
+	return linkedList_removeNode_atIndex(list_size);
 }
 
 // Sorting
