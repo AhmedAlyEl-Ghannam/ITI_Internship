@@ -7,6 +7,8 @@
 node* head = NULL;
 s32 list_size = 0;
 
+/********** Auxiliary Functions **********/
+
 static node* createNode(void)
 {
 	return (node*)malloc(sizeof(node));
@@ -22,6 +24,28 @@ void swap_nodes(node* node1, node* node2)
 	(node1->data) ^= (node2->data);
 }
 
+struct node* linkedList_traverseToIndex(u16 index)
+{
+	// check index validity
+	if ((index < 0) || (index > list_size))
+		return NULL; // indices out of bounds are prohibited
+	
+	// check list population
+	if (linkedList_isEmpty() == -5)
+		return NULL; // trying to remove node from an empty list is prohibited
+	
+	struct node* iterator = head;
+	int i;
+	for (i = 0; i < index; i++)
+		iterator = (iterator->next_node);
+	return iterator;
+}
+
+/********** End of Auxiliary Functions **********/
+
+/**************************************************/
+
+/********** Add Node Functions **********/
 
 s8 linkedList_addNode_atIndex(s32 value, u16 index)
 {
@@ -39,9 +63,9 @@ s8 linkedList_addNode_atIndex(s32 value, u16 index)
 	dumDumNode->data = value;
 	dumDumNode->next_node = NULL;
 	
-	if((index == 0)) // first node in the list
+	if(index == 0) // first node in the list
 	{
-		if (head == NULL)
+		if (head == NULL) // uninitialized head means that it's the start of a new list
 		{
 			dumDumNode->next_node = NULL;
 			head = dumDumNode;
@@ -54,7 +78,7 @@ s8 linkedList_addNode_atIndex(s32 value, u16 index)
 	}
 	else
 	{
-		node *temp = head;
+		node* temp = head;
 		
 		while (--index) // keep looping until you reach the node @ index
 			temp = (temp->next_node);
@@ -78,50 +102,62 @@ s8 linkedList_addNode_first(s32 value)
 
 s8 linkedList_addNode_last(s32 value)
 {
-	return ( ((list_size - 1) > -1) ? linkedList_addNode_atIndex(value, list_size - 1) : -9 );
+	return ( (list_size == 0) ? linkedList_addNode_atIndex(value, 0) : linkedList_addNode_atIndex(value, list_size - 1) );
 }
 
-// Remove Node
+/********** End of Add Node Functions **********/
+
+/**************************************************/
+
+/********** Remove Node Functions **********/
+
 s8 linkedList_removeNode_atIndex(u16 index)
 {
 	// check index validity
 	if ((index < 0) || (index > list_size))
 		return -1; // indicates that index is out of bounds
 	
-	
-	
+	// check list population
 	if (linkedList_isEmpty() == -5)
 		return -3; // trying to remove node from an empty list
-	else if (index > 0)
-	{
-		node* temp = head;
-		node* previous_node = NULL;
-		index--; // this ensures that temp would be AT MOST (end-1)
-		
-		while (--index) // keep looping until you reach the node @ index-1
+	
+	 // store head OG address in temp -> frees this address if index = 0
+	struct node* temp = head;
+	struct node* previous = NULL;
+
+	// delete the first node
+	if (index == 0) // update head node
+		head = head->next_node;
+	else
+	{		
+		while (index--) // keep looping until you reach the node @ index (stored in temp)
 		{
-			//previous_node = temp;
+			previous = temp;
 			temp = (temp->next_node);
 		}
-			
-		//(previous_node->next_node) = (temp->next_node);
-		temp->next_node = temp->next_node->next_node;
-		free(temp);
-		temp = NULL;
-	}
-	else // index = 0 => free head node and set it to NULL
-	{
-		if (list_size == 1)
-			head->next_node = NULL;
-		else // want to remove head but there are other nodes
-			(head->next_node) = (head->next_node->next_node);
-		free(head);
-		head = NULL;
-		
+	
+		previous->next_node = temp->next_node;
 	}
 	
+	free(temp); // to prevent memory leaks
+	temp = NULL; // to prevent dangling pointers
+	
 	list_size--;
+	
 	return 1; // indicates normal behaviour
+}
+
+s8 linkedList_removeNode_byValue(s32 value)
+{
+	s32 is_in_list = linkedList_isInList(value);
+	
+	switch (is_in_list)
+	{
+		case -7: return -3; // empty list -> cannot remove an node from an empty list
+		case -8: return -9; // not found -> no node with such value exist
+	}
+	
+	return linkedList_removeNode_atIndex((u16)is_in_list);
 }
 
 s8 linkedList_removeNode_first(void)
@@ -131,10 +167,15 @@ s8 linkedList_removeNode_first(void)
 
 s8 linkedList_removeNode_last(void)
 {
-	return linkedList_removeNode_atIndex(list_size);
+	return linkedList_removeNode_atIndex(list_size - 1);
 }
 
-// Sorting
+/********** End of Remove Node Functions **********/
+
+/**************************************************/
+
+/********** Sorting Functions **********/
+
 s8 linkedList_sort_ascendingly(void)
 {
 	if (linkedList_isEmpty() == -5) // empty list
@@ -143,28 +184,28 @@ s8 linkedList_sort_ascendingly(void)
 		return 0; // trying to sort a list that contains only one element
 	else // list larger than 2
 	{
-		node* start = head;
-		node* temp = NULL;
+		// loop iterators
+		int i, j;
+		// list iterators
+		struct node* iterator_i = NULL;
+		struct node* iterator_j = NULL;
 		
-		// bubble sort
-		while (start != NULL)
+		// bubble sort (tried this way with iterators---kinda like it ngl)
+		for (i = 0; i < list_size; i++)
 		{
-			temp = start;
-			while (temp->next_node != NULL)
+			iterator_i = linkedList_traverseToIndex(i);
+			for (j = i + 1; j < list_size; j++)
 			{
-				if ((temp->data) > (temp->next_node->data))
-					swap_nodes(temp, temp->next_node);
-				
-				temp = (temp->next_node);
+				iterator_j = linkedList_traverseToIndex(j);
+				if (iterator_i->data > iterator_j->data)
+					swap_nodes(iterator_i, iterator_j);
 			}
-			start = (start->next_node);
 		}
 	}
 	
 	return 1; // indicates normal behaviour
 }
 
-// this should be the same as ascendingly but I will make all value comparisons -ve
 s8 linkedList_sort_descendingly(void) 
 {
 	if (linkedList_isEmpty() == -5) // empty list
@@ -177,14 +218,14 @@ s8 linkedList_sort_descendingly(void)
 		node* temp_i = head;
 		node* temp_j = NULL;
 		
-		// bubble sort
-		for (i = 0; i < list_size; i++)
+		// bubble sort (this was the way I did it before but I fixed my stupid typo :""")
+		for (i = 0; i < (list_size - 1); i++)
 		{
 			temp_j = temp_i;
 			for (j = 0; j < (list_size - i - 1); j++)
 			{
-				if ((-(temp_j->data)) > (-(temp_j->next_node->data)))
-					swap_nodes(temp_j, temp_j->next_node);
+				if ((temp_i->data) < (temp_j->next_node->data)) // fml :)
+					swap_nodes(temp_i, temp_j->next_node);
 				temp_j = (temp_j->next_node);
 			}
 			temp_i = (temp_i->next_node);
@@ -194,7 +235,12 @@ s8 linkedList_sort_descendingly(void)
 	return 1; // indicates normal behaviour
 }
 
-// General-purpose
+/********** End of Sorting Functions **********/
+
+/**************************************************/
+
+/********** General-purpose Functions **********/
+
 s32 linkedList_size(void)
 {
 	return list_size;
@@ -224,8 +270,7 @@ s8 linkedList_print(void)
 	return 1; // indicates normal behaviour
 }
 
-// is_in_list => returns the index if yes : returns -1 if no
-s8 linkedList_isInList(s32 value)
+s32 linkedList_isInList(s32 value)
 {
 	if (linkedList_isEmpty() == -5)
 		return -7; // trying to check for the existance of value in an empty list
@@ -234,22 +279,28 @@ s8 linkedList_isInList(s32 value)
 	
 	u8 is_in_list = 0;
 	u16 index_counter = 0;
+	struct node* iterator_i = NULL;
 	
-	while(temp != NULL)
-	{	
-		if ((temp->data) == value)
+	for (index_counter = 0; index_counter < list_size; index_counter++)
+	{
+		iterator_i = linkedList_traverseToIndex(index_counter);
+		if (iterator_i != NULL)
 		{
-			is_in_list ^= 1;
-			break;
+			if ((iterator_i->data) == value)
+			{
+				is_in_list ^= 1; // raise flag
+				break;
+			}
 		}
 		
-		temp = (temp->next_node);
-		index_counter++;
 	}
-	
+		
 	if (is_in_list)
 		return index_counter;
 	else
 		return -8; // indicates that no nodes were found with this value
 }
 
+/********** End of General-purpose Functions **********/
+
+/**************************************************/

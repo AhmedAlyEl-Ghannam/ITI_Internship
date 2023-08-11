@@ -10,7 +10,7 @@ void main(void)
 	
 	u8 is_running = 1;
 	s32 value= 0;
-	u8 index = 1;
+	s32 index = 0;
 	
 	
 	while (is_running)
@@ -26,7 +26,7 @@ void main(void)
 			case 2 : 	printf("\nEnter a value: ");
 						scanf("%d", &value);
 						printf("Enter an index: ");
-						scanf("%hhd", &index);
+						scanf("%d", &index);
 						value = linkedList_addNode_atIndex(value, index);
 						return_type_handler(value);
 						break;
@@ -43,45 +43,57 @@ void main(void)
 						break;
 						
 			case 5 : 	printf("\nEnter an index: ");
-						scanf("%hhd", &index);
+						scanf("%d", &index);
 						value = linkedList_removeNode_atIndex(index);
 						return_type_handler(value);
 						break;
 						
-			case 6 : 	value = linkedList_removeNode_last();
+			case 6 : 	printf("\nEnter a value to delete: ");
+						scanf("%d", &value);
+						value = linkedList_removeNode_byValue(value);
+						return_type_handler(value);
+						break;			
+						
+			case 7 : 	value = linkedList_removeNode_last();
 						return_type_handler(value);
 						break;
 						
-			case 7 : 	value = linkedList_sort_ascendingly();
+			case 8 : 	value = linkedList_sort_ascendingly();
 						return_type_handler(value);
 						break;
 						
-			case 8 : 	value = linkedList_sort_descendingly();
+			case 9 : 	value = linkedList_sort_descendingly();
 						return_type_handler(value);
 						break;
 						
-			case 9 : 	printf("\n\t\t\tSize of List = %d\n", linkedList_size());
+			case 10: 	printf("\n\t\t\tSize of List = %d\n", linkedList_size());
 						break;
 						
-			case 10: 	value = linkedList_isEmpty();
+			case 11: 	value = linkedList_isEmpty();
 						return_type_handler(value);
 						break;
 						
-			case 11: 	printf("\nEnter a value to search for: ");
+			case 12: 	printf("\nEnter a value to search for: ");
 						scanf("%d", &value);
 						index = linkedList_isInList(value);
-						if (value == -8)
-							return_type_handler(value);
+						if (index == -8)
+							return_type_handler(index);
 						else
-							printf("\t\t\tValue was found at node %hhd\n", value);
+							printf("\t\t\tValue was found at node %hhd\n", index);
 						break;
 						
-			case 12: 	value = linkedList_print();
+			case 13: 	value = linkedList_print();
 						return_type_handler(value);
+						break;
+						
+			case 14: 	printf("\nEnter an index: ");
+						scanf("%d", &index);
+						struct node* temp = linkedList_traverseToIndex(index);
+						printf("\t\t\tNode at Index %d = %d", index, temp->data);
 						break;
 						
 			
-			case 13: 	is_running ^= 1;
+			case 15: 	is_running ^= 1;
 						break;
 						
 			default:	printf("\n\t\t\tInvalid Input! Try Again\n");
@@ -100,14 +112,16 @@ s16 menu(void)
 	printf("03. Add a node at the end\n");
 	printf("04. Remove a node at the beginning\n");
 	printf("05. Remove a node at index\n");
-	printf("06. Remove a node at the end\n");
-	printf("07. Sort list ascendingly\n");
-	printf("08. Sort list descendingly\n");
-	printf("09. Print the size of list\n");
-	printf("10. Tell me if list is empty\n");
-	printf("11. Tell me if value is in list\n");
-	printf("12. Print the linked list\n");
-	printf("13. Exit\n");
+	printf("06. Remove a node by value\n");
+	printf("07. Remove a node at the end\n");
+	printf("08. Sort list ascendingly\n");
+	printf("09. Sort list descendingly\n");
+	printf("10. Print the size of list\n");
+	printf("11. Tell me if list is empty\n");
+	printf("12. Tell me if value is in list\n");
+	printf("13. Print the linked list\n");
+	printf("14. Print node value by index\n");
+	printf("15. Exit\n");
 
 	printf("\nEnter your choice: ");
 	scanf("%hd", &choice);
@@ -118,10 +132,10 @@ s16 menu(void)
 void return_type_handler(s32 return_value)
 {
 	printf("\n\n");
-	
+	//no node with such value exist
 	switch(return_value)
 	{
-		case -9:	printf("\t\t\tCannot Add a Node at the End of an Empty List\n");
+		case -9:	printf("\t\t\tCannot Remove Node Because There is no Node with Such Value\n");
 					break;
 		case -8:	printf("\t\t\tCannot Find a Node with Such Value\n");
 					break;

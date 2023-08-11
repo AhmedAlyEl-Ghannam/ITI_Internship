@@ -3,7 +3,7 @@
 
 #include "STD_Types.h"
 
-/** #Indexing from 1 to list_size# */
+/** #Indexing from 0 to list_size-1# */
 
 // defining node struct
 typedef struct node
@@ -18,6 +18,7 @@ typedef struct node
  
 static node* createNode(void);
 void swap_nodes(node* node1, node* node2);
+struct node* linkedList_traverseToIndex(u16 index); // iterates over list and returns node at index
 
 /**
  *	MAIN METHODS
@@ -32,6 +33,7 @@ s8 linkedList_addNode_last(s32 value); // add_last
 s8 linkedList_removeNode_atIndex(u16 index); // remove_at_index
 s8 linkedList_removeNode_first(void); // remove_first
 s8 linkedList_removeNode_last(void); //remove_last
+s8 linkedList_removeNode_byValue(s32 value); // remove_by_value
 
 // Sorting
 s8 linkedList_sort_ascendingly(void); // sort_ascendingly
@@ -41,6 +43,6 @@ s8 linkedList_sort_descendingly(void); // sort_descendingly
 s32 linkedList_size(void); // size
 s8 linkedList_isEmpty(void); // is_empty
 s8 linkedList_print(void); // print_list
-s8 linkedList_isInList(s32 value); // is_in_list => returns the index if yes : returns -1 if no
+s32 linkedList_isInList(s32 value); // is_in_list => returns the index if yes : returns -1 if no
 
 #endif
