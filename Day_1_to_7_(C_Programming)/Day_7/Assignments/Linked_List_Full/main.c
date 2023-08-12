@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include "Linked_List.h"
 
+#define SORT_ASCENDINGLY 0
+#define SORT_DESCENDINGLY 1
+
 s16 menu(void);
 void return_type_handler(s32 return_value);
 
@@ -58,11 +61,11 @@ void main(void)
 						return_type_handler(value);
 						break;
 						
-			case 8 : 	value = linkedList_sort_ascendingly();
+			case 8 : 	value = linkedList_sort(SORT_ASCENDINGLY);
 						return_type_handler(value);
 						break;
 						
-			case 9 : 	value = linkedList_sort_descendingly();
+			case 9 : 	value = linkedList_sort(SORT_DESCENDINGLY);
 						return_type_handler(value);
 						break;
 						

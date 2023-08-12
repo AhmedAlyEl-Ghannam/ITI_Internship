@@ -24,6 +24,11 @@ void swap_nodes(node* node1, node* node2)
 	(node1->data) ^= (node2->data);
 }
 
+u8 compare_data(s32 data1, s32 data2, u8 comp_flag) 
+{
+	return ( comp_flag == 0 ? (data1 > data2) : (data1 < data2) );
+}
+
 struct node* linkedList_traverseToIndex(u16 index)
 {
 	// check index validity
@@ -174,9 +179,9 @@ s8 linkedList_removeNode_last(void)
 
 /**************************************************/
 
-/********** Sorting Functions **********/
+/********** Sorting Function **********/
 
-s8 linkedList_sort_ascendingly(void)
+s8 linkedList_sort(u8 sort_order_flag) // =0 for ascending : =1 for descending
 {
 	if (linkedList_isEmpty() == -5) // empty list
 		return -4; // trying to sort an empty list
@@ -197,7 +202,7 @@ s8 linkedList_sort_ascendingly(void)
 			for (j = i + 1; j < list_size; j++)
 			{
 				iterator_j = linkedList_traverseToIndex(j);
-				if (iterator_i->data > iterator_j->data)
+				if (compare_data(iterator_i->data, iterator_j->data, sort_order_flag))
 					swap_nodes(iterator_i, iterator_j);
 			}
 		}
@@ -206,36 +211,7 @@ s8 linkedList_sort_ascendingly(void)
 	return 1; // indicates normal behaviour
 }
 
-s8 linkedList_sort_descendingly(void) 
-{
-	if (linkedList_isEmpty() == -5) // empty list
-		return -4; // trying to sort an empty list
-	else if (list_size == 1)
-		return 0; // trying to sort a list that contains only one element
-	else // list larger than 2
-	{
-		int i, j;
-		node* temp_i = head;
-		node* temp_j = NULL;
-		
-		// bubble sort (this was the way I did it before but I fixed my stupid typo :""")
-		for (i = 0; i < (list_size - 1); i++)
-		{
-			temp_j = temp_i;
-			for (j = 0; j < (list_size - i - 1); j++)
-			{
-				if ((temp_i->data) < (temp_j->next_node->data)) // fml :)
-					swap_nodes(temp_i, temp_j->next_node);
-				temp_j = (temp_j->next_node);
-			}
-			temp_i = (temp_i->next_node);
-		}
-	}
-	
-	return 1; // indicates normal behaviour
-}
-
-/********** End of Sorting Functions **********/
+/********** End of Sorting Function **********/
 
 /**************************************************/
 

@@ -19,6 +19,7 @@ typedef struct node
 static node* createNode(void);
 void swap_nodes(node* node1, node* node2);
 struct node* linkedList_traverseToIndex(u16 index); // iterates over list and returns node at index
+u8 compare_data(s32 data1, s32 data2, u8 comp_flag); // comparison func for ascending/descending bubble sort 
 
 /**
  *	MAIN METHODS
@@ -36,8 +37,7 @@ s8 linkedList_removeNode_last(void); //remove_last
 s8 linkedList_removeNode_byValue(s32 value); // remove_by_value
 
 // Sorting
-s8 linkedList_sort_ascendingly(void); // sort_ascendingly
-s8 linkedList_sort_descendingly(void); // sort_descendingly
+s8 linkedList_sort(u8 sort_order_flag);
 
 // General-purpose
 s32 linkedList_size(void); // size
