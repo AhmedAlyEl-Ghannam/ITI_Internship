@@ -36,7 +36,8 @@ s8 creditCardNumberVerification_LuhnAlgorithm(char* card_number)
 	u8 digit_sum = 0;
 	u8 temp = 0;
 	
-	u16 card_number_len = calculate_StringLength(&card_number[0]);
+	u16 card_number_len; 
+	for (len = 0; str[card_number_len] != '\0'; card_number_len++);
 	
 	// adding unchanged values (even-index + last digit)
 	int i;
@@ -67,11 +68,4 @@ s8 creditCardNumberVerification_LuhnAlgorithm(char* card_number)
 		return 1; // indicates valid card number
 	else
 		return 0; // indicates invalid card number
-}
-
-u16 calculate_StringLength(char* str)
-{
-	u16 len;
-	for (len = 0; str[len] != '\0'; len++);
-	return len;
 }
