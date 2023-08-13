@@ -32,11 +32,11 @@ u8 compare_data(s32 data1, s32 data2, u8 comp_flag)
 struct node* linkedList_traverseToIndex(u16 index)
 {
 	// check index validity
-	if ((index < 0) || (index > list_size))
+	if ((index < 0) || (index >= list_size) && (list_size != 0))
 		return NULL; // indices out of bounds are prohibited
 	
 	// check list population
-	if (linkedList_isEmpty() == -5)
+	if (linkedList_isEmpty() == EMPTY_LIST)
 		return NULL; // trying to remove node from an empty list is prohibited
 	
 	struct node* iterator = head;
@@ -55,15 +55,15 @@ struct node* linkedList_traverseToIndex(u16 index)
 s8 linkedList_addNode_atIndex(s32 value, u16 index)
 {
 	// check index validity
-	if ((index < 0) || (index > list_size))
-		return -1; // indicates that index is out of bounds
+	if ((index < 0) || (index >= list_size) && (list_size != 0))
+		return INVALID_INDEX; // indicates that index is out of bounds
 	
 	node* dumDumNode = NULL;
 	dumDumNode = createNode();
 	
 	// check if node was created successfully
 	if (dumDumNode == NULL)
-		return -2; // indicates that memory allocation was not successful
+		return UNSUCCESSFUL_MEM_ALLOC; // indicates that memory allocation was not successful
 	
 	dumDumNode->data = value;
 	dumDumNode->next_node = NULL;
@@ -97,7 +97,7 @@ s8 linkedList_addNode_atIndex(s32 value, u16 index)
 	
 	list_size++;
 	
-	return 1; // indicates normal behaviour
+	return SUCCESSFUL_OPERATION; // indicates normal behaviour
 }
 
 s8 linkedList_addNode_first(s32 value)
@@ -119,12 +119,12 @@ s8 linkedList_addNode_last(s32 value)
 s8 linkedList_removeNode_atIndex(u16 index)
 {
 	// check index validity
-	if ((index < 0) || (index > list_size))
-		return -1; // indicates that index is out of bounds
+	if ((index < 0) || (index >= list_size) && (list_size != 0))
+		return INVALID_INDEX; // indicates that index is out of bounds
 	
 	// check list population
-	if (linkedList_isEmpty() == -5)
-		return -3; // trying to remove node from an empty list
+	if (linkedList_isEmpty() == EMPTY_LIST)
+		return REMOVE_NODE_FROM_EMPTY_LIST; // trying to remove node from an empty list
 	
 	 // store head OG address in temp -> frees this address if index = 0
 	struct node* temp = head;
@@ -149,7 +149,7 @@ s8 linkedList_removeNode_atIndex(u16 index)
 	
 	list_size--;
 	
-	return 1; // indicates normal behaviour
+	return SUCCESSFUL_OPERATION; // indicates normal behaviour
 }
 
 s8 linkedList_removeNode_byValue(s32 value)
@@ -158,8 +158,8 @@ s8 linkedList_removeNode_byValue(s32 value)
 	
 	switch (is_in_list)
 	{
-		case -7: return -3; // empty list -> cannot remove an node from an empty list
-		case -8: return -9; // not found -> no node with such value exist
+		case SEARCH_EMPTY_LIST: return REMOVE_NODE_FROM_EMPTY_LIST; // empty list -> cannot remove an node from an empty list
+		case NO_NODE_FOUND: 	return NO_NODE_TO_REMOVE; // not found -> no node with such value exist
 	}
 	
 	return linkedList_removeNode_atIndex((u16)is_in_list);
@@ -183,10 +183,10 @@ s8 linkedList_removeNode_last(void)
 
 s8 linkedList_sort(u8 sort_order_flag) // =0 for ascending : =1 for descending
 {
-	if (linkedList_isEmpty() == -5) // empty list
-		return -4; // trying to sort an empty list
+	if (linkedList_isEmpty() == EMPTY_LIST) // empty list
+		return UNSORTABLE_LIST; // trying to sort an empty list
 	else if (list_size == 1)
-		return 0; // trying to sort a list that contains only one element
+		return SORT_SINGLE_NODE; // trying to sort a list that contains only one element
 	else // list larger than 2
 	{
 		// loop iterators
@@ -208,7 +208,7 @@ s8 linkedList_sort(u8 sort_order_flag) // =0 for ascending : =1 for descending
 		}
 	}
 	
-	return 1; // indicates normal behaviour
+	return SUCCESSFUL_OPERATION; // indicates normal behaviour
 }
 
 /********** End of Sorting Function **********/
@@ -224,13 +224,13 @@ s32 linkedList_size(void)
 
 s8 linkedList_isEmpty(void)
 {
-	return ( (linkedList_size() < 1) ? -5 : 5 ); // return 5 for populated list and -5 for empty list
+	return ( (linkedList_size() < 1) ? EMPTY_LIST : POPULATED_LIST ); // return 5 for populated list and -5 for empty list
 }
 
 s8 linkedList_print(void)
 {
-	if (linkedList_isEmpty() == -5)
-		return -6; // trying to print an empty list
+	if (linkedList_isEmpty() == EMPTY_LIST)
+		return PRINT_EMPTY_LIST; // trying to print an empty list
 	
 	u16 i;
 	node* temp = head;
@@ -243,13 +243,13 @@ s8 linkedList_print(void)
 	}
 	printf("]");
 			
-	return 1; // indicates normal behaviour
+	return SUCCESSFUL_OPERATION; // indicates normal behaviour
 }
 
 s32 linkedList_isInList(s32 value)
 {
-	if (linkedList_isEmpty() == -5)
-		return -7; // trying to check for the existance of value in an empty list
+	if (linkedList_isEmpty() == EMPTY_LIST)
+		return SEARCH_EMPTY_LIST; // trying to check for the existance of value in an empty list
 	
 	node* temp = head;
 	
@@ -274,7 +274,7 @@ s32 linkedList_isInList(s32 value)
 	if (is_in_list)
 		return index_counter;
 	else
-		return -8; // indicates that no nodes were found with this value
+		return NO_NODE_FOUND; // indicates that no nodes were found with this value
 }
 
 /********** End of General-purpose Functions **********/

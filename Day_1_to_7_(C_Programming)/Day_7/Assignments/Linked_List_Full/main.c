@@ -138,29 +138,41 @@ void return_type_handler(s32 return_value)
 	//no node with such value exist
 	switch(return_value)
 	{
-		case -9:	printf("\t\t\tCannot Remove Node Because There is no Node with Such Value\n");
+		case NO_NODE_TO_REMOVE:	
+					printf("\t\t\tCannot Remove Node Because There is no Node with Such Value\n");
 					break;
-		case -8:	printf("\t\t\tCannot Find a Node with Such Value\n");
+		case NO_NODE_FOUND:	
+					printf("\t\t\tCannot Find a Node with Such Value\n");
 					break;
-		case -7: 	printf("\t\t\tCannot Find a Node in an Empty List\n");
+		case SEARCH_EMPTY_LIST: 	
+					printf("\t\t\tCannot Find a Node in an Empty List\n");
 					break;
-		case -6: 	printf("\t\t\tCannot Print an Empty List\n"); 						
+		case PRINT_EMPTY_LIST: 	
+					printf("\t\t\tCannot Print an Empty List\n"); 						
 					break;
-		case -5: 	printf("\t\t\tList is Empty\n"); 									
+		case EMPTY_LIST: 	
+					printf("\t\t\tList is Empty\n"); 									
 					break;
-		case -4: 	printf("\t\t\tUnable to Sort an Empty List\n"); 						
+		case UNSORTABLE_LIST: 	
+					printf("\t\t\tUnable to Sort an Empty List\n"); 						
 					break;
-		case -3: 	printf("\t\t\tNode Removal from an Empty List is Prohibited\n"); 	
+		case REMOVE_NODE_FROM_EMPTY_LIST: 	
+					printf("\t\t\tNode Removal from an Empty List is Prohibited\n"); 	
 					break;
-		case -2: 	printf("\t\t\tMemory Allocation was not Successful\n"); 				
+		case UNSUCCESSFUL_MEM_ALLOC: 	
+					printf("\t\t\tMemory Allocation was not Successful\n"); 				
 					break;
-		case -1: 	printf("\t\t\tOut of Bounds: Invalid Index\n"); 						
+		case INVALID_INDEX: 	
+					printf("\t\t\tOut of Bounds: Invalid Index\n"); 						
 					break;
-		case  0: 	printf("\t\t\tCannot Sort a List with Size 1\n"); 					
+		case  SORT_SINGLE_NODE: 	
+					printf("\t\t\tCannot Sort a List with Size 1\n"); 					
 					break;
-		case  1: 	printf("\t\t\tCommand Executed Successfully\n"); 					
+		case  SUCCESSFUL_OPERATION: 	
+					printf("\t\t\tCommand Executed Successfully\n"); 					
 					break;
-		case  5: 	printf("\t\t\tList is Populated\n"); 								
+		case  POPULATED_LIST: 	
+					printf("\t\t\tList is Populated\n"); 								
 					break;
 	}
 }

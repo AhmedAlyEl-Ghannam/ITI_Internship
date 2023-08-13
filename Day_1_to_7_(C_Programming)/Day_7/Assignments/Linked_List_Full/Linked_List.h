@@ -5,6 +5,23 @@
 
 /** #Indexing from 0 to list_size-1# */
 
+// Errors defined as enum
+typedef enum linkedList_errorCode
+{
+	NO_NODE_TO_REMOVE = -9, 
+	NO_NODE_FOUND = -8,
+	SEARCH_EMPTY_LIST = -7,
+	PRINT_EMPTY_LIST = -6,
+	EMPTY_LIST = -5,
+	UNSORTABLE_LIST = -4,
+	REMOVE_NODE_FROM_EMPTY_LIST = -3,
+	UNSUCCESSFUL_MEM_ALLOC = -2,
+	INVALID_INDEX = -1,
+	SORT_SINGLE_NODE = 0,
+	SUCCESSFUL_OPERATION = 1,
+	POPULATED_LIST = 5
+} linkedList_Error;
+
 // defining node struct
 typedef struct node
 {
