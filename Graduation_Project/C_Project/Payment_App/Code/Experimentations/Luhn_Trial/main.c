@@ -30,9 +30,6 @@ void main(void)
 
 s8 creditCardNumberVerification_LuhnAlgorithm(char* card_number)
 {
-	if (card_number == NULL)
-		return -1;
-	
 	u8 digit_sum = 0;
 	u8 temp = 0;
 	

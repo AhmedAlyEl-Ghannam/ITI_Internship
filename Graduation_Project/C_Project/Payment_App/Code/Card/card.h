@@ -19,6 +19,8 @@ typedef enum cardData_sizeLimits_t
 } cardData_sizeLimits_t;
 
 u8 verifyInputStrLimits(char *str, cardData_sizeLimits_t MIN, cardData_sizeLimits_t MAX);
+u8 creditCardNumberVerification_LuhnAlgorithm(char* card_number, u8 card_number_len);
+u8 noSpacesPAN(char *card_number, u8 card_number_len);
 
 EN_cardError_t getCardHolderName(ST_cardData_t *cardData);
 EN_cardError_t getCardExpiryDate(ST_cardData_t *cardData);
