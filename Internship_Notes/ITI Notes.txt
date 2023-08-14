@@ -604,3 +604,44 @@ Static Allocation				Dynamic Allocation
 ==================================================================================
 ----------------------------------------------------------------------------------
 # Day 08 (10/8/2023)
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 09 (14/8/2023)
+
+Eclipse Setup
+
+DIO
+	-> 4 Ports, each one has the following: (x stands for A B C D)
+		1. DDRx: for direction (0 for in && 1 for out)
+		2. PORTx: for output (1 for high && 0 for low) --- (must configure DDRx beforehand)
+		3. PINx: for input (1 for high && 0 for low) --- (not configured: read-only)
+		
+	-> Connection:
+		Sourcing: mc acts as current source for device (5V)
+		Sinking: mc acts as current sink (0V)
+		## Must check sink and source limits (20mA-40mA for both)
+		
+Superloop Architecture
+	
+## All registers are included in <avr/io.h>
+## Built-in delay function <utils/delay.h>
+
+Delay:
+	->_delay_ms(time_in_ms);
+	-> _delay_us(time_in_us);
+		
+### enum ONLY reserves memory only when it has been used
+### Both macros and enums do not consume memory on declaration (Both are basically the same!)
+### enums are smarter: they initialize the first value to 1 and AUTOMATICALLY
+	increments this value and stores it in the second element and so on
+## enums are a better replacement of macros
+
+### Difference between typedef and macros
+	-> typedef == equality
+	-> macros == text replacement
+	
+## Assigment:
+	-> apply some led animation
+	-> 
