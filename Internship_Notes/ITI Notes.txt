@@ -644,4 +644,42 @@ Delay:
 	
 ## Assigment:
 	-> apply some led animation
-	-> 
+	
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 10 (15/8/2023)
+
+Switches:
+	1. Momentary
+	2. Maintained
+	-> When pressed == 0V or 5V
+	-> When not pressed == floating (not desired)
+	-> MUST connect pull-up/pull-down resistor to give a defined state when switch is opened
+# in AVR, there is an internal pull-up resistor
+# to use it:
+	1. make pin as input (DDRx = 0)
+	2. set pin to high SET_PIN(PORTx, Pxx);
+
+	-> how to fix?
+		1. Hardware: using capacitors || RC filter || schmitt trigger
+		2. Software: add a delay after reading the button's state (100ms) (to let the rippling pass)
+		
+Layered Architecture
+	-> each module contains 5 files (for simplicity use only 1 & 2)
+		1. interface file (dio.h) --- (macros for user + func prototypes)
+		2. program file (dio.c) --- (implementation of funcs)
+		interface.h (func prototypes)
+		private.h (stuff that should be only visible to this module)
+		registers.h (register array for this module)
+		prog.c (func implementation)
+		cfg.h (macros + enums + modes of operations)
+		
+	-> Naming convention:
+		1. local:	u8 local_u8Var; // start by local then write its type then its name
+		2. function argument (pass by value): u8 copy_u8Var; // copy then type then name
+		3. functions: moduleName_retTypeName(); // module name then return type then name
+		4. camel case: sthLikeThis
+		5. pascal case: SthLikeThis
+		6. snake case: Sth_Like_This
+		
