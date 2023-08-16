@@ -682,4 +682,135 @@ Layered Architecture
 		4. camel case: sthLikeThis
 		5. pascal case: SthLikeThis
 		6. snake case: Sth_Like_This
+	
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 11 (16/8/2023)
+
+Configuration Types:
+	-> prebuilt/precompiled config
+	-> postbuild config
+	-> link-time config
+	
+	1. prebuilt/precompiled:
+		-> by using macros
+			#define LED_PORT DIO_PORTA
+			#define LED_PIN DIO_PIN0
+	### TAKE CARE OF #include ORDER! ###
+	2. post-build config
+		-> using structs for example
+			typedef struct
+			{
+				u8 port;
+				u8 pin;
+			} LED_t;
+	### FOOD FOR THOUGHT:
+		MAYBE, try implementing drivers using structs (mainly for HAL)
+	3. link-time
+		-> config.c => config.o
+			give the customer config.o and let them link it himself with their other files
+			## More for security reasons
+			
+Types of Displays:
+1. LED display
+2. Segment display
+3. Dot matrix
+## LED displays disadvantages:
+	-> high power consumption per led
+	-> consume a lot of pins
+## LED displays advantages
+	-> eye-catching
+	-> excellent view angles
+	-> small compact sizes
+
+Prerequisites for LCD:
+1. Light Polarization
+	-> light is an EMW
+	-> non-polarized light == light traveling in all directions/planes
+	-> light + polarizer = polarized light (travels in one direction/plane only)
+	# Polarizer:
+		-> vertical
+		-> horizontal
+2. Liquid crystal
+	-> at STP, it's in a liquid-y state
+	-> its internal structure changes by applying a voltage effect
+
+# this is the concept behind LCD
+	-> light polarization
+		2 polarizers (one vertical and one horizontal)
+	-> liquid crystal
+		apply current => no light will pass through horizontal polarizer
+
+LCD Types
+1. Segment LCD (looks like a couple of 7seg stuck together)
+2. Alpha-numeric/character LCD
+3. graphical LCD
+
+# LCD Module: LED source + liquid crystal + polarizer + panel + built-in mc
+
+### How will my mc communicate with the LCD's mc?
+	-> Via 8-line parallel communication
+	-> byte-by-byte
+
+LCD Pins:
+	-> Power Pins (3 pins):
+		VSS -> GND
+		VDD -> 5v (Vcc) 
+		Vo -> contrast control (0-5V) --- controlled by potentiometer (behaving according to voltage division rule)
+	-> Control Pins (3 pins)
+		RS -> (register select) (0 for command || 1 for data)
+		# commands like clear_display, cursor_location, shift_display
+		R/W' -> 0 for Write || 1 for read (busy flag: wait for LCD to execute command || read data from LCD)
+		E -> enable signal (rising edge to start reading from databus || falling edge to start writing from databus on LCD)
+	-> Data Pins (8 pins): send data & commands
+		D0
+		.
+		.
+		.
+		D7
+	-> Backlight Pins (2 pins)
+		A -> 5V
+		K -> GND
 		
+## VCC/VDD => connected to high (5V)
+## VSS/VEE => connected to low (GND/0V)
+
+Potentiometer => VCC Vo GND (connect Vo the LCD's Vo at Vo XDDD)
+
+Connection of mc to LCD:
+	-> PORTx => D0-D7
+	-> Px =>RS
+	-> Px => E
+	-> Px => R/W' (R/W' can be connected to GND instead)
+	
+## We need our software to be independent on the connection
+## HOW?
+## Using pre-build configuration
+	#define LCD_DATA_PORT DIO_PORTA
+	#define LCD_CTRL_PORT DIO_PORTB
+	#define LCD_CTRL_RS DIO_PIN0
+	#define LCD_CTRL_E DIO_PIN1
+	#define LCD_CTRL_RW DIO_PIN2
+	
+## in 4-bit mode, D0->D3 are left floating (data is transmitted on D4->D7 only)
+## in 8-bit mode, D0->D7 are all connected normally
+
+### in 4-bit mode: MS Nibble is sent first, then LS Nibble
+
+### CHECK THE INITIALIZATION STEPS OF LCD IN ITS DATASHEET
+
+## DL == mode
+## N == no of lines
+## F == font types (5x11 or 5x8)
+
+LCD APIs needed:
+	-> initialization
+	-> send char
+	-> send string
+	-> send command (clear, set cursor, etc)
+	-> send int
+	-> send float
+
+	
+	
