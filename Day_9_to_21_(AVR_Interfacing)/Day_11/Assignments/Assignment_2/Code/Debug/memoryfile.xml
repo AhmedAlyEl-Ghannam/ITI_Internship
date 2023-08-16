@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project>                                  
-  <executable name="Assignment_2.elf">                 
+  <executable name="XC8Application1.elf">                 
     <memory name="program">              
       <units>bytes</units>                 
       <length>32768</length>                 
-      <used>1538</used>                     
-      <free>31230</free>                     
+      <used>1154</used>                     
+      <free>31614</free>                     
     </memory>                              
     <memory name="data">                 
       <units>bytes</units>                 
