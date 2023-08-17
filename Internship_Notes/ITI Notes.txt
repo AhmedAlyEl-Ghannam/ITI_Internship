@@ -812,5 +812,72 @@ LCD APIs needed:
 	-> send int
 	-> send float
 
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 12 (17/8/2023)
+
+Keypad Idea of Operation
+	-> 4x4 keypad consists of 16 button, with 4 col terminals and 4 row terminals
+	-> in order to read a button press:
+		1. put all cols to high, read rows (rows are connected to INTERNAL mc pull-up resistors---default logic is 1)
+		2. Activate col0 by putting it to low ###, then read rows for any change in logic values
+			(pressed buttons will give logic 0)
+		3. change the activated col periodically to read the remaining buttons
+
+Algorithm:
+1. Outer loop to activate Col0->Col3
+2. Inner loop to check on Row0->Row3
+3. If Rowx is low, it is then pressed -> register this button press -> break
+4. return the pressed button
+
+Normal duration of a single press = 250ms
+
+If the user is a عيل رخم and keeps pressing the button
+we can wait UNTIL the button is unpressed (busy wait aka polling)
+
+Config:
+	-> KEYPAD_COL_PIN0 -> PIN3 (assign them to DIO_PIN4->DIO_PIN7 (OUTPUT--PU))
+	-> KEYPAD_ROW_PIN0 -> PIN3 (assign them to DIO_PIN0->DIO_PIN3 (INPUT))
+
+APIs:
+	-> keypad_init (activate pull-ups @cols + set col0-3 direction to out && row0-3 to in)
+	-> read_button (the algorithm above and it should return the char/num corresponding to the pressed button)
+		## store all the weird-ass combinations as enums then as a 2d array of said enums ##
 	
-	
+### Header Guard ONLY prevents multiple definitions of preprocessor directives
+### defining an array for example and including the header multiple times will 
+### result in multiple definition of array!
+########Answer:
+Global variable's scope is ALL of the project BUT not all of the project's files can use it...?!
+MUST USE extern in each file that uses that array/variable
+
+# Extra Assignment #
+	-> Simple Garage System:
+		2x 7 segment + 2x switches + 2x LEDs (red for full && green for empty space)
+		Car entering = INC displayed count
+		Car exiting = DES displayed count
+		MAX Car count = 25 cars
+		
+	-> Simple Calculator:
+		Add && Sub 2 numbers (keep each a single digit)
+		pressing '=' will calculate and display the result
+		
+Switches
+	-> Mechanical
+	-> Electrical
+
+Electrical Switches
+	-> Why? easier/more convenient to control stuff electrically
+	-> Actuated by electrical signal (no hooman interaction)
+	-> action is taken by mc
+	-> act as a layer of isolation between mc and component (that may consume high power)
+	1. PN Junction (diode)--passes current in one direction only
+	2. Transistor 
+		-> cutoff == base = GND && emitter = VCC && collector = VCC (oc) ###
+		-> saturation == base = VCC && emitter = GND && collector = VCC (sc-ish) ###
+		-> active == base = VCC && emitter = collector = GND (as amplifier)
+		ex: 
+			connect mc to base of transistor (case 0: off || case 1: on)
+			connect emitter to GND
+			connect collector to VCC
