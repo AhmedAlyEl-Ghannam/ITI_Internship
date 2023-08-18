@@ -20,7 +20,7 @@ void LCD_voidInitDisplay(void)
 	#elif (LCD_MODE_OF_OPERATION == LCD_8BIT_MODE)
 		DIO_voidSetPortDirection(LCD_DATA_PORT, DIO_PORT_OUTPUT);
 	#endif
-	
+	_delay_ms(35);
 	#if (LCD_MODE_OF_OPERATION == LCD_4BIT_MODE)
 		LCD_voidSendCMD(0b000010000);
 		_delay_us(50);
@@ -56,9 +56,9 @@ void LCD_voidSendCMD(u8 copy_u8Command)
 {
 	DIO_voidSetPinValue(LCD_CTRL_PORT, LCD_CTRL_RS, DIO_PIN_LOW);
 	DIO_voidSetPinValue(LCD_CTRL_PORT, LCD_CTRL_RW, DIO_PIN_LOW);
-	DIO_voidSetPinValue(LCD_CTRL_PORT, LCD_CTRL_EN, DIO_PIN_HIGH);
 	DIO_voidSetPortValue(LCD_DATA_PORT, copy_u8Command);
-	_delay_us(2);
+	DIO_voidSetPinValue(LCD_CTRL_PORT, LCD_CTRL_EN, DIO_PIN_HIGH);
+	_delay_us(1);
 	DIO_voidSetPinValue(LCD_CTRL_PORT, LCD_CTRL_EN, DIO_PIN_LOW);
 }
 
@@ -78,13 +78,14 @@ void LCD_voidDisplayChar(u8 copy_u8Char)
 {
 	DIO_voidSetPinValue(LCD_CTRL_PORT, LCD_CTRL_RS, DIO_PIN_HIGH); // data
 	DIO_voidSetPinValue(LCD_CTRL_PORT, LCD_CTRL_RW, DIO_PIN_LOW); // Write
-	DIO_voidSetPinValue(LCD_CTRL_PORT, LCD_CTRL_EN, DIO_PIN_HIGH); // EN rising edge
 	DIO_voidSetPortValue(LCD_DATA_PORT, copy_u8Char);
-	_delay_us(2);
+	DIO_voidSetPinValue(LCD_CTRL_PORT, LCD_CTRL_EN, DIO_PIN_HIGH); // EN rising edge
+	_delay_us(1);
 	DIO_voidSetPinValue(LCD_CTRL_PORT, LCD_CTRL_EN, DIO_PIN_LOW); // EN rising edge
+	_delay_ms(10);
 }
 
-void LCD_voidDisplayStr(u8 *copy_u8Str)
+void LCD_voidDisplayStr(const u8 *copy_u8Str)
 {
 	if (copy_u8Str == NULL)
 		return;
@@ -96,38 +97,37 @@ void LCD_voidDisplayStr(u8 *copy_u8Str)
 
 void LCD_voidDisplayInt(u32 copy_u32Number)
 {
-	u8 local_u8NumAsCharArr[11] = {0};
-	//u8 local_u8NumDigits = 0;
+	u8 local_u8NumAsCharArr[10];
+	u8 local_u8NumDigits = 0;
 	
 	u32 local_u32ReversedNum = 0;
 	
-	s8 local_s8Iterator = 0;
+	s8 local_s8Iterator;
 	
 	// reversing the number so that it will be stored in order
 	while (copy_u32Number)
 	{
 		local_u32ReversedNum = (local_u32ReversedNum * 10) + (copy_u32Number % 10);
 		copy_u32Number /= 10;
-		//local_u8NumDigits++;
+		local_u8NumDigits++;
 	}
 	
-	while (local_u32ReversedNum)
+	for (local_s8Iterator = 0; local_s8Iterator < local_u8NumDigits; local_s8Iterator++)
 	{
 		local_u8NumAsCharArr[local_s8Iterator] = (local_u32ReversedNum % 10) + '0';
 		local_u32ReversedNum /= 10;
-		local_s8Iterator++;
 	}
-	//local_u8NumAsCharArr[10] = '\0';
+	local_u8NumAsCharArr[local_u8NumDigits] = '\0';
 	
-	LCD_voidDisplayStr(&local_u8NumAsCharArr[0]);
+	LCD_voidDisplayStr(local_u8NumAsCharArr);
 }
 
 void LCD_voidSetCursorPosition(u8 copy_u8XPosition, u8 copy_u8YPosition)
 {
 	switch (copy_u8YPosition)
 	{
-		case LCD_LINE1: LCD_voidSendCMD(LCD_DDRAM_ADD1 + copy_u8XPosition - 1); break;
-		case LCD_LINE2: LCD_voidSendCMD(LCD_DDRAM_ADD2 + copy_u8XPosition - 1); break;
+		case LCD_LINE1: LCD_voidSendCMD(0x80 + copy_u8XPosition); break;
+		case LCD_LINE2: LCD_voidSendCMD(0xC0 + copy_u8XPosition); break;
 	}
 }
 

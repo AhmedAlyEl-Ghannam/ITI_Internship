@@ -21,7 +21,7 @@ void LCD_voidDisplayShiftRight(u8 copy_u8Flag);
 
 // display on LCD
 void LCD_voidDisplayChar(u8 copy_u8Char);
-void LCD_voidDisplayStr(u8 *copy_u8Str);
+void LCD_voidDisplayStr(const u8 *copy_u8Str);
 void LCD_voidDisplayInt(u32 copy_u32Number);
 
 
