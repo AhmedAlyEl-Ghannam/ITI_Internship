@@ -1,78 +1,37 @@
 /*
  * main.c
  *
- * Created: 8/16/2023 1:09:42 AM
+ * Created: 8/18/2023 12:38:54 AM
  *  Author: Ahmed
- */ 
-
-#include "LIB/STD_Types.h"
-#include "MCAL/DIO/DIO_Prog.c"
-#include "HAL/LED/LED_Prog.c"
-#include "HAL/SEVEN_SEGMENT/SS_Prog.c"
+ */  
+#define NULL ((void*)0)
 #define F_CPU 8000000
 #include <util/delay.h>
+#include "MCAL/DIO/DIO_Prog.c"
+#include "HAL/LCD/LCD_Prog.c"
 
 #define TRUE 1
 
-void green_LED(void);
-void yellow_LED(void);
-void red_LED(void);
 
-
-int main(void)
+void main(void)
 {
-    LED_voidLEDSingleInit(DIO_PORTA, DIO_PIN0);
-	LED_voidLEDSingleInit(DIO_PORTA, DIO_PIN1);
-	LED_voidLEDSingleInit(DIO_PORTA, DIO_PIN2);
 	
-	SS_voidSevenSegInit(DIO_PORTB);
+	// LCD initialization
+	LCD_voidInitDisplay();
 	
-	while(TRUE)
+	u8 local_u8IteratorCol;
+	u8 local_u8IteratorRow = 1;
+    while(TRUE)
     {
-        green_LED();
-		yellow_LED();
-		red_LED();
+		for (local_u8IteratorCol = 0; local_u8IteratorCol < 16; local_u8IteratorCol++)
+		{
+			LCD_voidSetCursorPosition(local_u8IteratorCol, local_u8IteratorRow+1);
+			_delay_ms(1);
+			LCD_voidDisplayChar('H');
+			LCD_voidDisplayChar('I');
+			_delay_ms(500);
+			LCD_voidClrDisplay();
+			TOG_BIT(local_u8IteratorRow, 0);
+		}
     }
-}
-
-void green_LED(void)
-{
-	LED_voidToggleLEDSingle(DIO_PORTA, DIO_PIN0);
-	u8 i;
-	for (i = 9; i >= 0; i--)
-	{
-		SS_voidDisplayNumber(DIO_PORTB, SS_values[i]);
-		_delay_ms(1000);
-		if (i == 0)
-			break;
-	}
-	LED_voidToggleLEDSingle(DIO_PORTA, DIO_PIN0);
-}
-
-void yellow_LED(void)
-{
-	LED_voidToggleLEDSingle(DIO_PORTA, DIO_PIN1);
-	u8 i;
-	for (i = 3; i >= 0; i--)
-	{
-		SS_voidDisplayNumber(DIO_PORTB, SS_values[i]);
-		_delay_ms(1000);
-		if (i == 0)
-			break;
-	}
-	LED_voidToggleLEDSingle(DIO_PORTA, DIO_PIN1);
-}
-
-void red_LED(void)
-{
-	LED_voidToggleLEDSingle(DIO_PORTA, DIO_PIN2);
-	u8 i;
-	for (i = 9; i >= 0; i--)
-	{
-		SS_voidDisplayNumber(DIO_PORTB, SS_values[i]);
-		_delay_ms(1000);
-		if (i == 0)
-			break;
-	}
-	LED_voidToggleLEDSingle(DIO_PORTA, DIO_PIN2);
 }

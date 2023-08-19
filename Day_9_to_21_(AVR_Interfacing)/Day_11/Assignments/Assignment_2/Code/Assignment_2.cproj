@@ -12,9 +12,9 @@
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>XC8Application1</AssemblyName>
-    <Name>XC8Application1</Name>
-    <RootNamespace>XC8Application1</RootNamespace>
+    <AssemblyName>Assignment_2</AssemblyName>
+    <Name>Assignment_2</Name>
+    <RootNamespace>Assignment_2</RootNamespace>
     <ToolchainFlavour>XC8_2.36</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>

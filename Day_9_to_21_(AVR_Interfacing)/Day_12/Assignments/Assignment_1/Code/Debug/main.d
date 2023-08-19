@@ -11,10 +11,15 @@ main.d main.o: .././main.c \
  .././MCAL/DIO/DIO_Prog.c .././MCAL/DIO/../../LIB/Bit_Math.h \
  .././MCAL/DIO/../../LIB/STD_Types.h .././MCAL/DIO/DIO_Registers.h \
  .././MCAL/DIO/DIO_Private.h .././MCAL/DIO/DIO_CFG.h \
- .././MCAL/DIO/DIO_Interface.h .././HAL/LCD/LCD_Prog.c \
- .././HAL/LCD/../../LIB/Bit_Math.h .././HAL/LCD/../../MCAL/DIO/DIO_CFG.h \
- .././HAL/LCD/../../MCAL/DIO/DIO_Interface.h .././HAL/LCD/LCD_CFG.h \
- .././HAL/LCD/LCD_Private.h .././HAL/LCD/LCD_Interface.h
+ .././MCAL/DIO/DIO_Interface.h .././HAL/KEYPAD/Keypad_Prog.c \
+ .././HAL/KEYPAD/../../MCAL/DIO/DIO_CFG.h \
+ .././HAL/KEYPAD/../../MCAL/DIO/DIO_Interface.h \
+ .././HAL/KEYPAD/Keypad_CFG.h .././HAL/KEYPAD/Keypad_Private.h \
+ .././HAL/KEYPAD/Keypad_Interface.h .././HAL/SEVEN_SEGMENT/SS_Prog.c \
+ .././HAL/SEVEN_SEGMENT/../../MCAL/DIO/DIO_CFG.h \
+ .././HAL/SEVEN_SEGMENT/../../MCAL/DIO/DIO_Interface.h \
+ .././HAL/SEVEN_SEGMENT/SS_CFG.h .././HAL/SEVEN_SEGMENT/SS_Private.h \
+ .././HAL/SEVEN_SEGMENT/SS_Interface.h
 
 c:\program\ files\microchip\xc8\v2.36\avr\avr\include\util\delay.h:
 
@@ -48,16 +53,26 @@ c:\program\ files\microchip\xc8\v2.36\avr\avr\include\math.h:
 
 .././MCAL/DIO/DIO_Interface.h:
 
-.././HAL/LCD/LCD_Prog.c:
+.././HAL/KEYPAD/Keypad_Prog.c:
 
-.././HAL/LCD/../../LIB/Bit_Math.h:
+.././HAL/KEYPAD/../../MCAL/DIO/DIO_CFG.h:
 
-.././HAL/LCD/../../MCAL/DIO/DIO_CFG.h:
+.././HAL/KEYPAD/../../MCAL/DIO/DIO_Interface.h:
 
-.././HAL/LCD/../../MCAL/DIO/DIO_Interface.h:
+.././HAL/KEYPAD/Keypad_CFG.h:
 
-.././HAL/LCD/LCD_CFG.h:
+.././HAL/KEYPAD/Keypad_Private.h:
 
-.././HAL/LCD/LCD_Private.h:
+.././HAL/KEYPAD/Keypad_Interface.h:
 
-.././HAL/LCD/LCD_Interface.h:
+.././HAL/SEVEN_SEGMENT/SS_Prog.c:
+
+.././HAL/SEVEN_SEGMENT/../../MCAL/DIO/DIO_CFG.h:
+
+.././HAL/SEVEN_SEGMENT/../../MCAL/DIO/DIO_Interface.h:
+
+.././HAL/SEVEN_SEGMENT/SS_CFG.h:
+
+.././HAL/SEVEN_SEGMENT/SS_Private.h:
+
+.././HAL/SEVEN_SEGMENT/SS_Interface.h:
