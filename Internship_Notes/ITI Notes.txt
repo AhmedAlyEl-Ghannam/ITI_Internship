@@ -881,3 +881,28 @@ Electrical Switches
 			connect mc to base of transistor (case 0: off || case 1: on)
 			connect emitter to GND
 			connect collector to VCC
+			
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 13 (20/8/2023)
+
+H-Bridge
+Optocoupler
+Relay
+SPST
+SPDT
+DPDT
+Darlington Pair
+DC Motor
+Buzzer
+Stepper Motor
+APIs for stepper:
+	1. init()
+	2. rotate_clk()
+	3. rotate_anticlk()
+	4. set_angle()
+	5. set_speed()
+	
+
+Interrupts *SCREAMS*
