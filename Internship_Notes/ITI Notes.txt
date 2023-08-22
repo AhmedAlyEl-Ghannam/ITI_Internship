@@ -904,5 +904,116 @@ APIs for stepper:
 	4. set_angle()
 	5. set_speed()
 	
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 14 (21/8/2023)
 
 Interrupts *SCREAMS*
+
+Dynamics Systems:
+	1. Superloop (do this code FOREVER!)
+	2. Foreground/Background (Superloop + Interrupt-based)
+		
+-> Peripheral interrupt enable (key for a specific interrupt)
+-> global interrupt enable (allows interrupts to happen---not necessarily respond to them unless they are enabled)
+-> Peripheral interrupt flag (interrupt event itself)
+
+In order for a peripheral to have interrupt:
+	1. enable PIE
+	2. enable GIE
+
+How are interrupts handled?
+	-> vectored priority (each interrupt has its own unique ISR)
+		
+	-> flexible/non-vectored priority (same ISR for all interrupts---only execute the one who's flag is set)
+		(ordered from highest to lowest priority---use if statements not if-else)
+
+What happens when 2 interrupts occur at the same time?
+	-> serve the one with the highest priority first
+There are no Nested interrupts in AVR
+
+Interrupt Types:
+	1. internal (inside processor)
+		fetch -> wrong address -> interrupt
+		decode -> wrong op code -> interrupt
+		execute -> divide by zero -> interrupt
+		# SW interrupts
+			provides increased privilage (access registers that are not normally allowed0)
+	2. External
+		peripherals: ADC, EXTI, ...
+
+When interrupt is triggered:
+	1. complete current instruction
+	2. disable global interrupt enable
+	3. push PC in stack (Context Switching)
+	4. push CPU registers (PSW, GPRs) (Context Switching)
+	5. Jmp to vector table and fetch the address of the ISR 
+	6. Jmp to ISR (execute it)
+	*after it is done*
+	7. enable global interrupts
+	8. reload pre-ISR values of cpu registers (Context Switching)
+	9. reload pre-ISR PC value (Context Switching)
+	*continue normal operation*
+	
+Context Switching (ISRs && function calls)
+	ISRs have HW privilages
+	normal function do not have that
+	
+Interrupt Mask
+	-> Mask: can be ignored
+	-> Non-Maskable: cannot be ignored (like reset)
+	
+Interrupt latency = interrupt response time (differs per operation) + ISR execution time
+
+External Interrupt (EXTI)
+	1. Level-triggered (INT0, INT1)
+		low
+		high
+	2. Edge-triggered (INT0, INT1)
+		rising edge (INT2)
+		falling edge (INT2)
+	
+EXTI Registers:
+	MCU Control Register (MCUCR)
+	-> set event trigger for INT0 and INT1 by writting ISCxx bits
+	
+	(SREG)
+	-> set the I-flag 
+	
+	MCUCSR (for INT2)
+	
+	General Interrupt Control (GICR)
+	-> Enables peripheral interrupts 
+	
+	General Interrupt Flag Register (GIFR)
+		
+Coding:
+	-> ISR => ISR for interrupts (called by passing a parameter indicating the ISR specific for a specific interrupt)
+	-> sei => enable global interrupts (used as init function)
+	-> cli => diable global interrupts
+	
+Initialization:
+	-> choose the sense control from MCUCR/MCUSR
+	-> Input pull-up or not 
+	-> Enable the interrupt from GICR
+	
+	
+	### make a function that does ONLY one thing SOLID principle in OOP
+	
+APIs Needed:
+	-> initialization
+	-> enable EXTI
+	-> disable EXTI
+
+### how to decrease interrupt latency?
+decrease execution time inside ISR
+decrease context switching time (kinda not possible)
+
+### WHAT TO WRITE IN EACH FILE 
+	-> Prog.c == function implementations + static functions
+	-> Interface.h == Stuff that the user will see and MUST KNOW (not change) to interact with thy driver
+	-> CFG.h == Stuff the user is allowed to change to configure the driver to their liking
+	-> Register.h == do I really need to explain this one?
+	-> Private.h == stuff used in driver but the user must not see/use/modify
+### Apparently, just including Interface.h in your project is enough... NEED TO TEST THIS!
