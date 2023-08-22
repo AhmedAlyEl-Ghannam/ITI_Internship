@@ -19,11 +19,10 @@
 void ISR_INT0(void);
 void ISR_INT1(void);
 
-s8 carCount = 0;
+volatile s8 carCount = 0;
 
+volatile static u8 global_u8Flag = 0;
 
-static void newCarEntry(void);
-static void carExited(void);
 static void updateSevenSeg(s8 num);
 static void updateStatusLED(void);
 
@@ -49,14 +48,19 @@ void main(void)
 	sei();
 	EXTI_voidEnableInterrupt(EXTI_GICR_INT0);
 	EXTI_voidEnableInterrupt(EXTI_GICR_INT1);
-	EXTI_voidSetSignalSenseMode(EXTI_SENSE_ANY_CHANGE, EXTI_GICR_INT0);
-	EXTI_voidSetSignalSenseMode(EXTI_SENSE_ANY_CHANGE, EXTI_GICR_INT1);
+	EXTI_voidSetSignalSenseMode(EXTI_SENSE_RISING_EDGE, EXTI_GICR_INT0);
+	EXTI_voidSetSignalSenseMode(EXTI_SENSE_RISING_EDGE, EXTI_GICR_INT1);
 	EXTI_voidSetCallBack(ISR_INT0, EXTI_INT0);
 	EXTI_voidSetCallBack(ISR_INT1, EXTI_INT1);
 	
+	// test LED
+	DIO_voidSetPinDirection(DIO_PORTD, DIO_PIN6, DIO_PIN_OUTPUT);
+	DIO_voidSetPinDirection(DIO_PORTD, DIO_PIN7, DIO_PIN_OUTPUT);
+	
     while(TRUE)
     {
-		
+		updateSevenSeg(carCount);
+		updateStatusLED();
     }
 }
 
@@ -64,31 +68,29 @@ void ISR_INT0(void)
 {
 	if (carCount < MAX_CAR_COUNT)
 		carCount++;
-	updateSevenSeg(carCount);
-	updateStatusLED();
 }
 void ISR_INT1(void)
 {
 	if (carCount > 0)
 		carCount--;
-	updateSevenSeg(carCount);
-	updateStatusLED();
 }
 
 static void updateSevenSeg(s8 num)
 {
 	u8 carCountArr[2] = {0};
-	u8 digitsStored = 0;
-	while (num)
-	{
-		carCountArr[digitsStored] = num  % 10;
-		num /= 10;
-		digitsStored++;
-	}
+	u8 carCountUnits = 0;
+	u8 carCountTens = 0;
+	
+	carCountUnits = num  % 10;
+	num /= 10;
+	carCountTens = num  % 10;
+		
+	carCountArr[0] = carCountUnits;
+	carCountArr[1] = carCountTens;
 	
 	u8 i;
 	u8 SS_Port = DIO_PORTB;
-	for (i = 0; i < digitsStored; i++)
+	for (i = 0; i < 2; i++)
 	{
 		switch (carCountArr[i])
 		{

@@ -73,45 +73,13 @@ void EXTI_voidInit(void)
 	#endif
 }
 
-// to do: Maybe make each of these switches a function like macro... (it will look neater)
 void EXTI_voidSetSignalSenseMode(u8 copy_u8SenseMode, u8 copy_u8Line)
 {
 	switch (copy_u8Line)
 	{
 		case EXTI_GICR_INT0: SET_INT0_SENSE_MODE() break;
-			
-		case EXTI_GICR_INT1:
-			switch (copy_u8SenseMode)
-			{
-				case EXTI_SENSE_FALLING_EDGE: 
-					CLR_BIT(MCUCR, EXTI_MCUCR_ISC10);
-					SET_BIT(MCUCR, EXTI_MCUCR_ISC11);
-					break;
-				case EXTI_SENSE_RISING_EDGE	: 
-					SET_BIT(MCUCR, EXTI_MCUCR_ISC10);
-					SET_BIT(MCUCR, EXTI_MCUCR_ISC11);
-					break;
-				case EXTI_SENSE_LOW_LEVEL	: 
-					CLR_BIT(MCUCR, EXTI_MCUCR_ISC10); 
-					CLR_BIT(MCUCR, EXTI_MCUCR_ISC11);
-					break;
-				case EXTI_SENSE_ANY_CHANGE	: 
-					SET_BIT(MCUCR, EXTI_MCUCR_ISC10);
-					CLR_BIT(MCUCR, EXTI_MCUCR_ISC11);
-					break;
-			}
-			break;
-		case EXTI_GICR_INT2:
-			switch (copy_u8SenseMode)
-			{
-				case EXTI_SENSE_FALLING_EDGE: 
-					CLR_BIT(MCUCSR, EXTI_MCUCSR_ISC2);
-					break;
-				case EXTI_SENSE_RISING_EDGE	: 
-					SET_BIT(MCUCSR, EXTI_MCUCSR_ISC2);
-					break;
-			}
-			break;
+		case EXTI_GICR_INT1: SET_INT1_SENSE_MODE() break;
+		case EXTI_GICR_INT2: SET_INT2_SENSE_MODE() break;
 	}
 }
 
@@ -144,52 +112,37 @@ void cli(void)
 
 void EXTI_voidSetCallBack(void (*copy_ptrvoidCallBack)(void), u8 copy_u8Line)
 {
-
 	if (copy_ptrvoidCallBack != NULL)
 		EXTI_CallBack[copy_u8Line] = copy_ptrvoidCallBack;
-
 }
 
 
-/* ISR --> Implementation */
 void __vector_1(void) __attribute__((signal));
 void __vector_1(void)
 {
-
 	if(EXTI_CallBack[0] != NULL)
 	{
-
 		EXTI_CallBack[0](); 
 		EXTI_voidClearFlag(EXTI_GICR_INT0);
-
 	}
-
 }
 
 void __vector_2(void) __attribute__((signal));
 void __vector_2(void)
 {
-
 	if(EXTI_CallBack[1] != NULL)
 	{
-
 		EXTI_CallBack[1]();
 		EXTI_voidClearFlag(EXTI_GICR_INT1);
-
 	}
-
 }
 
 void __vector_3(void) __attribute__((signal));
 void __vector_3(void)
 {
-
 	if( EXTI_CallBack[2] != NULL )
 	{
-
 		EXTI_CallBack[2]();
 		EXTI_voidClearFlag(EXTI_GICR_INT2);
-
 	}
-
 }
