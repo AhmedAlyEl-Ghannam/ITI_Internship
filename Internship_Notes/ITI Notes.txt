@@ -1017,3 +1017,86 @@ decrease context switching time (kinda not possible)
 	-> Register.h == do I really need to explain this one?
 	-> Private.h == stuff used in driver but the user must not see/use/modify
 ### Apparently, just including Interface.h in your project is enough... NEED TO TEST THIS!
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 15 (22/8/2023)
+
+Volatile keyword
+	-> tells the optimizer to skip any optimization it wants to make
+	-> used for variables that CONSTANTLY change values and it is crucial to 
+	   acknowledge all these changes and the optimizer SHOULD NOT change/modify its behaviour
+	-> used in:
+		register definitions
+		global variables used in ISR
+
+ADC (Analog to Digital Converter)
+
+Converting from Analog to Digital:
+	1. Sampling 
+		(a rate at which values are taken)
+		(Nyquist rate is the ultimate optimal rate ==> fs = 2*fm)
+	2. Quantization 
+		(approximate samples' values to the nearest quantization level)
+		(Parameters: Resolution (bits/sample) && Max Value (Vmax))
+	3. Coding 
+		(Each quantization level it given a unique code)
+		
+## How to improve ADC performance?
+	=> by increasing the resolution/number of bits
+	=> decreasing the Max Value Vmax
+	
+## Saturation Voltage (voltage level at which nothing beyond it will be measured---it will always register as Vmax)
+## Vsat = Vmax - Vstep
+
+## Quality of signal is determined by: Sampling Rate
+## Resolution (bits/sample) ==> memory/processing power trade-off
+
+## Vref == Vmax
+
+ADC contains a DAC...?!
+Analog Sample = Vstep * Coded_Sample_Value
+
+ADC Parameters:
+	1. Conversion Time
+		time to convert to digital
+		Tc_min = 1 clk cycle @ zero input voltage
+		Tc_max = 2^resolution @ all one input voltage
+		## Sample freq > conversion time ##
+	2. Errors
+		quantization error
+		propagation delay/error @ ADC CLK >> conversion
+		
+
+Types of ADC:
+	1. RAMP ADC
+	
+	2. SAR ADC (Successive Approximation Register)
+		same as RAMP but with different counter
+		
+APIs needed:
+	1. initialize 
+		-> choose prescaler
+		-> mode (10 bit, 8 bit)
+		-> Vref ?
+		-> Enable ADC
+	2. ReadDigitalSync (channel)
+		-> choose channel
+		-> start conversion
+		-> polling on flag (HELL NO!)
+		-> clear flag
+		-> return result
+	3. ReadDigitalAsync (channel)
+		-> choose channel
+		-> enable interrupt
+		-> start conversion
+	4. disableADC
+	5. enableADC
+	6. Source Trigger
+	
+Sensors
+
+# Temperature Sensor LM35
+# LDR
+# Thermistor
