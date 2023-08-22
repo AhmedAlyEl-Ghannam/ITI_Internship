@@ -709,7 +709,7 @@ Configuration Types:
 		MAYBE, try implementing drivers using structs (mainly for HAL)
 	3. link-time
 		-> config.c => config.o
-			give the customer config.o and let them link it himself with their other files
+			give the customer config.o and let them link it themselves with their other files
 			## More for security reasons
 			
 Types of Displays:
@@ -1095,8 +1095,17 @@ APIs needed:
 	5. enableADC
 	6. Source Trigger
 	
+### Input frequency for ATmega32 must be between 50kHz & 200kHz 
+
+### putting UL after a number in multiplication indicates that 
+### the result of this operation is u32 ###
+
 Sensors
 
 # Temperature Sensor LM35
 # LDR
 # Thermistor
+
+# Lab_2 is an assignment (ADC)
+# Lab_1 is an assignment (Sensors)
+# LDR Lab is an assignment (Sensors)
