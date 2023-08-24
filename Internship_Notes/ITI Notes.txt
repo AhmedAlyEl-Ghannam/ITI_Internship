@@ -1109,3 +1109,24 @@ Sensors
 # Lab_2 is an assignment (ADC)
 # Lab_1 is an assignment (Sensors)
 # LDR Lab is an assignment (Sensors)
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 16 (23/8/2023)
+
+Callback:
+	-> instead of defining the function ptr, make it typedef
+		void (*ptrFunc)(void);
+		typedef void (*ptrFunc)(void);
+		ptrFunc ptr1 = NULL; // can be used just like this
+		## naming your function ptr has to include its arg and return type
+		ptrFunc_Ivoid_Ovoid
+		
+## MODIFICATION To STD_Types ##
+	1. add enum bool
+	2. add enum ERRORS
+	3. add NULL
+	4. add typedef ptrFunc_voidI_voidO
+	
+Timer
