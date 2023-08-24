@@ -4,22 +4,24 @@
 #include "ADC_Private.h"
 #include "ADC_CFG.h"
 #include "ADC_Interface.h"
+#include <util/delay.h>
 
 static u16 *ADC_u16ptrADCResult = NULL;
 static ptrFunc ADC_funcPtr_ISR = NULL;
 
 void ADC_voidInit(void)
 {
+	
 	// set vref
 	#if (ADC_REFV == ADC_REFV_SEL_AVCC)
 	
-		#define VREF  5000
+		#define VREF  5000UL
 		SET_BIT(ADMUX, ADC_ADMUX_REFS0);
 		CLR_BIT(ADMUX, ADC_ADMUX_REFS1);
 	
 	#elif (ADC_REFV == ADC_REFV_SEL_2_56V)
 	
-		#define VREF  2560
+		#define VREF  2560UL
 		SET_BIT(ADMUX, ADC_ADMUX_REFS0);
 		SET_BIT(ADMUX, ADC_ADMUX_REFS1);
 	
@@ -116,23 +118,19 @@ void ADC_voidInit(void)
 	
 	// enable ADC (must be at the end)
 	#if (ADC_STATUS == ADC_ENABLE)
-		
-		SET_BIT(ADCSRA, ADC_ADCSRA_ADEN);
+	
+	SET_BIT(ADCSRA, ADC_ADCSRA_ADEN);
 	
 	#elif (ADC_STATUS == ADC_DISABLE)
-		
-		CLR_BIT(ADCSRA, ADC_ADCSRA_ADEN);
-		
+	
+	CLR_BIT(ADCSRA, ADC_ADCSRA_ADEN);
+	
 	#endif
 	
 	// enable ADC interrupt (must be at the end)
 	#if (ADC_INT_STATUS == ADC_INT_ENABLE)
 		
 		SET_BIT(ADCSRA, ADC_ADCSRA_ADEN);
-	
-	#elif (ADC_INT_STATUS == ADC_INT_DISABLE)
-		
-		CLR_BIT(ADCSRA, ADC_ADCSRA_ADEN);
 		
 	#endif
 }
@@ -249,12 +247,14 @@ void ADC_voidClearADCInterruptFlag(void)
 void ADC_voidStartConversion(void)
 {
 	SET_BIT(ADCSRA, ADC_ADCSRA_ADSC);
+	//_delay_ms(10);
 }
 
-u8 ADC_u8GetResultSync(u8 copy_u8Channel, u16 *copy_u16ptrResult)
+u16 ADC_u8GetResultSync(u8 copy_u8Channel)
 {
 	// TO DO: verify channel && ptr passed
 	
+	u16 copy_u16Result = 0;
 	// select channel
 	ADMUX &= ADC_ADMUX_CHANNEL_MASK;
 	ADMUX |= copy_u8Channel;
@@ -272,20 +272,22 @@ u8 ADC_u8GetResultSync(u8 copy_u8Channel, u16 *copy_u16ptrResult)
 	if (local_u32TimeOutCounter == ADC_TIME_OUT_LIMIT)
 		return 0; // will edit this later
 	
+	_delay_ms(10);
+	
 	// clear interrupt flag
 	ADC_voidClearADCInterruptFlag();
 	
 	#if (ADC_ADJUST_RESULT == ADC_RIGHT_ADJUST)
 		
-		(*copy_u16ptrResult) = (ADCL | (ADCH << 8));
+		copy_u16Result = ((u16)ADCL | (u16)(ADCH << 8));
 
 	#elif (ADC_ADJUST_RESULT == ADC_LEFT_ADJUST)
 		
-		(*copy_u16ptrResult) = ADCH;
+		copy_u16Result = ADCH;
 		
 	#endif
 	
-	return 1; // will edit this later
+	return copy_u16Result; // will edit this later
 }
 
 u8 ADC_u8StartConversionAsync(u8 copy_u8Channel, u16 *copy_u16ptrResult, ptrFunc copy_funcptrNotificationFunc)
@@ -305,6 +307,8 @@ u8 ADC_u8StartConversionAsync(u8 copy_u8Channel, u16 *copy_u16ptrResult, ptrFunc
 	
 	// enable ADC interrupt
 	ADC_voidEnableADCInterrupt();
+	
+	return 1;
 }
 
 // TO DO: Chain conversion functions (not a priority tho)

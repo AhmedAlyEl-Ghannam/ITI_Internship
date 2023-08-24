@@ -10,7 +10,7 @@
 	if it will be used (in millivolt (mV))
  */
  
-#define ADC_AREF_VALUE 5000
+#define ADC_AREF_VALUE 5000UL
 
 /**
 	Reference Voltage Configuration Options
@@ -27,7 +27,7 @@
 		ADC_RIGHT_ADJUST
 */
 
-#define ADC_ADJUST_RESULT ADC_LEFT_ADJUST
+#define ADC_ADJUST_RESULT ADC_RIGHT_ADJUST
 
 
 /**

@@ -100,16 +100,6 @@ void EXTI_voidClearFlag(u8 copy_u8Line)
 		CLR_BIT(GIFR, copy_u8Line);
 }
 
-void sei(void)
-{
-	SET_BIT(SREG, EXTI_SREG_I);
-} 
-
-void cli(void)
-{
-	CLR_BIT(SREG, EXTI_SREG_I);
-}
-
 void EXTI_voidSetCallBack(void (*copy_ptrvoidCallBack)(void), u8 copy_u8Line)
 {
 	if (copy_ptrvoidCallBack != NULL)

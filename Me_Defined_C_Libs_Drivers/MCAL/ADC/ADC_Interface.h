@@ -18,7 +18,7 @@ void ADC_voidEnableADCInterrupt(void);
 void ADC_voidDisableADCInterrupt(void);
 void ADC_voidClearADCInterruptFlag(void);
 
-u8 ADC_u8GetResultSync(u8 copy_u8Channel, u16 *copy_u16ptrResult);
+u16 ADC_u8GetResultSync(u8 copy_u8Channel);
 u8 ADC_u8StartConversionAsync(u8 copy_u8Channel, u16 *copy_u16ptrResult, ptrFunc copy_funcptrNotificationFunc);
 
 // To Do (but not now!)

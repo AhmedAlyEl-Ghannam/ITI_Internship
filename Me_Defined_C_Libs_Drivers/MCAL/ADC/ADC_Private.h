@@ -87,7 +87,7 @@
 #define ADC_ADCSRA_ADPS0	0
 
 /* Prescaler Mask */
-#define ADC_ADCSRA_PRESCALER_MASK 0b11111000
+#define ADC_ADCSRA_PRESCALER_MASK 0xF8
 
 /********************************************************/
 

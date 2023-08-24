@@ -1,8 +1,6 @@
 #ifndef EXTI_PRIVATE_H_
 #define EXTI_PRIVATE_H_
 
-#define NULL ((void*)0)
-
 #define SET_INT0_SENSE_MODE() 	switch (copy_u8SenseMode) 					\
 								{											\
 									case EXTI_SENSE_FALLING_EDGE: 			\
