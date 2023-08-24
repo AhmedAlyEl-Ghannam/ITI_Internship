@@ -23,4 +23,21 @@ typedef float f32;
 typedef double f64;
 typedef long double f128;
 
+typedef enum bool 
+{
+	true  = 1,
+	false = 0
+} bool;
+
+/* typedef enum errors
+{
+	
+} errors; */
+
+#define NULL ((void *)0)
+
+#define F_CPU 8000000UL
+
+typedef void (*ptrFunc)(void);
+
 #endif
