@@ -1,5 +1,4 @@
 #include "../../LIB/STD_Types.h"
-#include "../../MCAL/ADC/ADC_Prog.c"
 #include "POTENTIOMETER_Private.h"
 #include "POTENTIOMETER_CFG.h"
 #include "POTENTIOMETER_Interface.h"

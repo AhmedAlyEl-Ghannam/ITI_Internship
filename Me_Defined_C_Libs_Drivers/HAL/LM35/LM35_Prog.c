@@ -1,5 +1,4 @@
 #include "../../LIB/STD_Types.h"
-#include "../../MCAL/ADC/ADC_Prog.c"
 #include "LM35_Private.h"
 #include "LM35_CFG.h"
 #include "LM35_Interface.h"

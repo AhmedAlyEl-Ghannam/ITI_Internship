@@ -247,7 +247,6 @@ void ADC_voidClearADCInterruptFlag(void)
 void ADC_voidStartConversion(void)
 {
 	SET_BIT(ADCSRA, ADC_ADCSRA_ADSC);
-	//_delay_ms(10);
 }
 
 u16 ADC_u8GetResultSync(u8 copy_u8Channel)
