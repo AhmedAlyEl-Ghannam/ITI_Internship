@@ -1,18 +1,22 @@
+#include "../../LIB/STD_Types.h"
+#include "../../LIB/BIT_Math.h"
+#include "WDT_Register.h"
+#include "WDT_Private.h"
+#include "WDT_CFG.h"
+#include "WDT_Interface.h"
 
-void WDT_enable(u8 wait_time)
+void WDT_voidEnable(void)
 {
-	SET_BIT(WDTCR, WDE);
+	SET_BIT(WDTCR, WDT_WDTCR_WDE);
 	
-	WDTCR &= 0b11111000;
-	WDTCR |= wait_time;
+	WDTCR &= WDT_PRESCALER_MASK;
+	WDTCR |= WDT_WAIT_TIME;
 }
 
-void WDT_disable(void)
+void WDT_voidDisable(void)
 {
-	// both WDTOE && WDE must be written 1 at the same time
-	// write 0 to WDE
-	mask = 0b 000 11 000
-	WDTCR |= (1<<WDTOE) | (1<<WDR);
+	// write 1 to both WDTOE && WDE at the same time
+	WDTCR |= WDT_DISABLE_MASK;
+	// clear to turn off
 	WDTCR = 0x00;
-	
 }
