@@ -1129,4 +1129,98 @@ Callback:
 	3. add NULL
 	4. add typedef ptrFunc_voidI_voidO
 	
-Timer
+Timer (OVF && CTC)
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 17 (24/8/2023)
+
+Timer (PWM)
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 18 (26/8/2023)
+
+Timer (WDT && ICU)
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 19 (27/8/2023)
+
+Communication Protocols
+	-> oftentimes in big systems, there are more than 1 mcu that need to 
+		communicate with each other
+	-> they need a STANDARD (language) in order to communicate successfully
+	
+protocol: a way of communication
+standard protocol: documented way of communication + global recognition
+For any communication protocol:
+	-> communication specs
+		1. media (Factors: speed && distance)
+			wired 
+			(secure --- low cost --- fixed --- high maintenance cost --- higher speed)
+			wireless
+			(less secure --- high cost --- mobile --- lower maintenance cost --- lower speed)
+		2. Transmission technique
+			serial
+			(bit-by-bit --- not slow at all --- most used in mcu)
+			ex:
+				UART, SPI, I2C, CAN, LIN, Ethernet, HDMI, USB
+			parallel
+			(byte-by-byte --- complex connection --- prone to crosstalk --- data/clock skew (due to different wire characteristics) --- used more within CPU (data && address buss))
+		3. Receiver/Transmitter
+			peer-to-peer
+				both are able to communicate with each other at any time
+				no shared block
+			master-slave
+				master determines who is going to send and when they are going to send it
+				single-master-multi-slave (SPI, LIN)
+				multi-master-multi-slave (I2C)
+				multi-master-no-slaves (CAN)
+				single-master-single-slave (SPI)
+		4. Transmission Direction
+			simplex (TV, Radio)
+			half-duplex (Walkie Talkie)
+			full-duplex (mobile phone calls)
+		5. Synchronization
+			different speeds can cause a loss of synchronization 
+			sync clk => clk line connecting both --- send/receive at rising/falling edge
+			async clk => BAUD rate generator---both mcus determine a specific rate of transfer
+			in-frame sync (LIN)
+		6. Throughput
+			determines the ratio between actual data sent to all bits sent
+			extra sent data can be sth like:
+				start bit
+				end bit
+				error bit
+			#a communication protocol should not be judged on speed only#
+			#Always take throughput into consideration#
+	-> HW interface
+	-> frame format
+	
+UART (Universal Asynchronous receiver/transmitter)
+	Tx
+	Rx
+	Common GND ###    
+	
+	-> Frame Format
+		1. idle state is high (always high at idle)
+		2. start bit is low (signifies that what comes after is data)
+		3. data (5, 6, 7, 8, 9) bits
+		4. parity bit for error checking (optional)
+			even parity => no. of ones + parity = even
+			odd parity => no. of ones + parity = odd
+		5. stop bit is high (can be 1 or 2 stop bits)
+	-> Throughput = [55%, 82%]
+
+----------------------------------------------------------------------------------
+==================================================================================
+----------------------------------------------------------------------------------
+# Day 20 (29/8/2023)
+	
+SPI (Serial Peripheral Interface)
+	Pins: MOSI, MISO, SCK, SS'
+	
